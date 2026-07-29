@@ -26,6 +26,26 @@ Every validating node must obtain the same result from valid inputs. Contracts
 therefore cannot directly call arbitrary websites, read local clocks, or use
 unseeded randomness: those nodes could observe different results.
 
+This replication is the source of both assurance and cost. Ordinary server code
+runs once under an operator's control. A public-blockchain transaction is
+distributed, checked, and re-executed by many independent nodes, and its durable
+state must remain available to future validators. The result is a shared
+execution environment in which participants can verify the rules without
+trusting one server, but computation and storage are much more constrained than
+in a conventional cloud application.
+
+The transition is also ordered. If Alice and Bob both try to spend the same
+balance, each transaction can be valid against the starting state, yet only the
+first in canonical order succeeds if it consumes the balance. Consensus chooses
+the order; execution determines the result. A useful mental model separates:
+
+| Layer | Main responsibility |
+|---|---|
+| Consensus | Choose an agreed ordering and canonical history |
+| Execution | Apply each transaction to prior state under deterministic rules |
+| Storage commitments | Let nodes commit to and verify the resulting state |
+| Application | Define domain-specific authorization and accounting |
+
 ## Virtual Machines
 
 A virtual machine defines:
@@ -59,6 +79,24 @@ Other platforms use WebAssembly, Move VM, Solana's SVM, Cairo VM, or custom
 environments. Compatibility claims should distinguish source language,
 bytecode, RPC, account model, and behavioral equivalence.
 
+### Execution Environments Are Design Choices
+
+The EVM's sequential transaction semantics and shared contract calls make
+atomic composability straightforward, but the shared state can become a
+bottleneck. Other environments expose parallel execution when transactions
+declare or can be shown to touch independent state. Resource-oriented
+languages such as Move represent assets with types intended to constrain
+copying and destruction. Zero-knowledge-oriented VMs prioritize efficient
+proof generation. None is simply "faster EVM": each changes developer
+tooling, security assumptions, concurrency, state access, and compatibility.
+
+Source-code compatibility means a program may compile after small changes.
+Bytecode compatibility means existing compiled contracts can run. RPC
+compatibility helps wallets and tools communicate. State and behavioral
+compatibility require edge cases—gas, precompiles, call behavior, and
+cryptography—to match. Evaluating these separately prevents a familiar
+interface from being mistaken for identical execution.
+
 ## Transactions And Calls
 
 An externally submitted transaction can:
@@ -71,6 +109,13 @@ An externally submitted transaction can:
 
 Contracts can synchronously call other contracts during the same transaction.
 These internal calls are not separate user-signed transactions.
+
+The externally owned account authorizes the top-level transaction. Contracts
+down the call tree authorize behavior using `msg.sender`, signatures, stored
+roles, or other logic. Each frame has its own caller, input, memory, return
+data, value, and remaining gas. A call can succeed while a nested low-level call
+fails if the caller deliberately catches the failure; "atomic" does not mean
+every subcall is automatically required to succeed.
 
 ```mermaid
 sequenceDiagram
@@ -119,6 +164,21 @@ Gas price is not execution effort. Gas used measures metered resources; price
 per gas reflects market conditions. A contract can be functionally correct but
 unusable when fees rise.
 
+In Ethereum's EIP-1559 fee market, a transaction specifies a maximum total fee
+per gas and a maximum priority fee. The protocol calculates a block base fee
+from prior block demand and burns it; the priority component rewards block
+inclusion. If the fee cap is 40 gwei, the base fee is 25 gwei, and the priority
+cap is 2 gwei, the effective price is 27 gwei rather than the full cap. A
+transaction using 80,000 gas costs:
+
+```text
+80,000 × 27 gwei = 2,160,000 gwei = 0.00216 ETH
+```
+
+Fee-market details differ by chain, and rollups add data-publication or
+proof-related costs. Applications should estimate the complete fee path, not
+assume the execution-meter component is the user's total cost.
+
 ### Out Of Gas
 
 If execution exhausts its limit, the call reverts while consumed gas remains
@@ -129,6 +189,14 @@ spent. Nested-call behavior depends on gas forwarding and error handling.
 Deployment executes initialization code and stores resulting runtime bytecode.
 Addresses can derive from creator and nonce or from deterministic deployment
 using salt and code hash.
+
+Construction and initialization deserve separate attention. A conventional
+deployment executes constructor logic once. A proxy's implementation
+constructor does not initialize the proxy's storage, so an initializer function
+usually performs that job through delegated execution. If initialization is
+publicly callable, callable twice, or omitted, an attacker may acquire roles or
+the system may begin with invalid state. Deployment scripts, transaction order,
+and address verification are therefore part of the security boundary.
 
 Deterministic deployment enables counterfactual addresses but creates risks
 around initialization, code assumptions, and address reuse under platform
@@ -145,6 +213,14 @@ dispatch require care.
 
 Canonical encoding is security-critical. A displayed call description can
 differ from the actual bytes signed if wallet decoding is wrong or unavailable.
+
+For a call such as `transfer(address,uint256)`, the selector identifies the
+function and the remaining calldata encodes its arguments in fixed-size words
+and referenced dynamic regions. The ABI is not self-describing: bytes do not
+carry a trustworthy human-readable name. Wallets and explorers need a matching
+interface, verified source, or independent decoding logic. A malicious
+interface can label an approval or arbitrary call as something benign while
+the signed bytes remain authoritative.
 
 ## Events And Logs
 
@@ -179,6 +255,13 @@ Common patterns include:
 Roles can control minting, pausing, freezing, upgrades, oracle settings, fees,
 collateral, and recovery. The risk depends on the complete authority graph, not
 the label "decentralized."
+
+Authority analysis should follow capabilities recursively. A governance token
+may vote on a timelock, the timelock may control a proxy admin, the proxy admin
+may replace logic, and the new logic may transfer every asset. Separately, a
+security council might bypass the timelock to pause or upgrade. Listing only
+the visible owner address misses inherited authority, delegate calls, role
+administrators, multisig signer replacement, and offchain control of signers.
 
 ```mermaid
 flowchart TD
@@ -234,6 +317,14 @@ Risks include:
 Upgradeability converts code risk into governance and key risk. A timelock
 improves observability only if users can exit before execution.
 
+Storage layout makes proxy upgrades unusually delicate. Delegated code reads
+and writes the proxy's storage slots. Reordering variables or changing types can
+cause new logic to interpret an old balance as an address or overwrite an
+administrator. Safe upgrades preserve layout, reserve storage where needed,
+test migrations against a copy of live state, and verify both implementation
+and proxy configuration. Even a technically correct upgrade changes the code
+whose behavior users originally assessed.
+
 ## Token Standards
 
 A standard defines interfaces and expected behavior. It does not guarantee
@@ -264,6 +355,19 @@ Important limitations:
 - approvals create spend authority and race or phishing risk;
 - a transfer to an incompatible contract may trap tokens.
 
+Allowance is a separate ledger from balance. If Alice approves protocol P for
+1,000 units, P can ask the token contract to transfer up to that amount from
+Alice, subject to the token's current rules and Alice's balance. Sending no
+tokens to P does not make the approval harmless. If P or an upgradeable
+component it controls is compromised later, the unused authority can still be
+exercised.
+
+Tokens that rebase or charge transfer fees illustrate why an interface is not
+an accounting model. A protocol that records "100 received" because the caller
+requested a transfer of 100 can become insolvent if only 98 arrived. Robust
+integrations compare balances before and after, define supported behaviors, and
+avoid assuming decimals, return values, or supply are immutable.
+
 ### ERC-721
 
 Non-fungible tokens map unique IDs to owners and approvals. The token ID does
@@ -287,6 +391,14 @@ Key concepts include:
 
 Vaults remain vulnerable to rounding, donation or inflation attacks, strategy
 loss, illiquidity, and incorrect accounting.
+
+A vault has two units: underlying assets and vault shares. If 1,000 shares
+represent 1,100 assets, a share is economically worth 1.1 assets before fees
+and rounding. Depositing assets mints shares at the current conversion rate;
+redeeming burns shares for assets. Edge cases arise when supply is near zero,
+assets are donated without minting shares, unrealized strategy values are
+wrong, or a withdrawal cannot liquidate assets. The standard aligns interfaces;
+it cannot make the reported `totalAssets` correct or liquid.
 
 ### Wrapped Assets
 
@@ -332,6 +444,14 @@ optional paymasters.
 Programmability improves usability but adds contract, bundler, paymaster,
 simulation, censorship, and upgrade risk.
 
+In the ERC-4337 model, a user signs a **UserOperation** rather than a
+protocol-native transaction. A bundler packages operations into a transaction
+to a common EntryPoint contract. The account validates its own signature and
+nonce logic; a paymaster can conditionally fund gas. This enables recovery and
+sponsorship without changing Ethereum consensus, but introduces a specialized
+mempool and simulation rules. A paymaster outage can block sponsored users even
+when the account and chain remain healthy.
+
 ## Composability
 
 Contracts can call other protocols atomically. A lending protocol can use an
@@ -347,6 +467,30 @@ Composability creates:
 
 An upstream token pause, oracle error, governance upgrade, or liquidity collapse
 can break many downstream protocols.
+
+The same-transaction call graph makes dependency failure synchronous. If a
+liquidation requires an oracle read, a vault redemption, and a DEX swap, one
+unexpected revert can stop the whole path. Conversely, atomicity prevents the
+liquidator from being left with only half the intended operation. System
+analysis should map both direct calls and economic dependencies, including
+tokens, price feeds, governance, front ends, sequencers, bridges, and keeper
+incentives.
+
+```mermaid
+flowchart LR
+    User["User or automated actor"]
+    Lending["Lending contract"]
+    Oracle["Price oracle"]
+    Vault["Vault token"]
+    DEX["DEX liquidity"]
+    Admin["Governance and upgrade path"]
+    User --> Lending
+    Lending --> Oracle
+    Lending --> Vault
+    Lending --> DEX
+    Admin --> Lending
+    Admin --> Oracle
+```
 
 ## Common Failure Modes
 
@@ -428,6 +572,26 @@ individual happy-path functions.
 An audit is a bounded review of a version and scope. It is not a guarantee, and
 upgrades or integrations can invalidate conclusions.
 
+These techniques answer different questions. Unit tests check selected
+examples; fuzzing explores many generated inputs; invariant testing searches
+sequences that violate system-wide properties; static analysis flags known
+code patterns; symbolic execution reasons about paths under mathematical
+constraints; and formal verification proves a stated property of a model.
+None proves that the specification captures the intended economics. A formally
+verified function can faithfully implement a flawed interest formula or trust
+an economically manipulable oracle.
+
+### Section Summary
+
+| Assurance target | Core question | Representative control |
+|---|---|---|
+| Authorization | Who can cause each state change? | Roles, signatures, nonces, timelocks |
+| Accounting | Do assets, shares, debt, and fees reconcile? | Invariants and balance-delta checks |
+| Execution | Can calls revert, reenter, or exhaust resources unexpectedly? | Call-graph review, fuzzing, gas bounds |
+| Change control | Can code or configuration be replaced safely? | Upgrade tests, storage checks, delayed governance |
+| Dependencies | What external state must remain correct and available? | Oracle checks, caps, fallback and pause design |
+| User intent | Do signed bytes match what the user understands? | Trusted decoding, simulation, bounded approvals |
+
 ## Protocol Versus Company
 
 A protocol can include immutable contracts, upgradeable contracts, governance,
@@ -482,6 +646,10 @@ front ends, APIs, hosted infrastructure, oracles, and a company. Determine:
   [ERC-4626](https://eips.ethereum.org/EIPS/eip-4626)
 - Ethereum Improvement Proposals,
   [ERC-4337 Account Abstraction](https://eips.ethereum.org/EIPS/eip-4337)
+- Ethereum Improvement Proposals,
+  [EIP-1559 Fee Market Change](https://eips.ethereum.org/EIPS/eip-1559)
+- Solidity,
+  [Contract ABI specification](https://docs.soliditylang.org/en/latest/abi-spec.html)
 - OpenZeppelin,
   [Proxy Upgrade Pattern](https://docs.openzeppelin.com/upgrades-plugins/proxies)
 - OpenZeppelin,

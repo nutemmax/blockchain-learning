@@ -68,8 +68,10 @@ Status labels:
 
 #### `00-course-guide/01-orientation/`
 
-- **Migrated — `glossary.md`:** retained as a concise navigation aid rather than
-  a substitute for the canonical explanations.
+- **Migrated and expanded — `glossary.md`:** repository-wide reference for
+  specialized finance, regulatory, blockchain, infrastructure, protocol, and
+  company terminology. Definitions remain concise relative to the canonical
+  topic notes and link back to them for full mechanisms and trade-offs.
 - The former `introduction-concepts.md` duplicated the glossary and several
   foundation notes, mixed in fast-changing claims, and contained
   project-orchestration material. It is preserved as
@@ -394,7 +396,7 @@ Status labels:
 | `notes/enterprise-ethereum-stack.md` | Moved, retitled, neutralized, and project-specific naming removed |
 | `notes/blockchain-compliance-analytics.md` | Moved and neutralized as the analytics-mechanics note |
 | `notes/elliptic-chainalysis.md` | Moved; project/buyer assessment converted to neutral comparison |
-| `glossary.md` | Moved to the course guide and given scope and sources |
+| `glossary.md` | Moved to the course guide and expanded into the repository-wide terminology reference |
 | `introduction-concepts.md` | Preserved under `archive/`; excluded from the course |
 
 No existing note should be rewritten merely because it is old or is being moved.

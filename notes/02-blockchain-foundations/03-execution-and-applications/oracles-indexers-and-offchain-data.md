@@ -11,6 +11,21 @@ Both cross a trust boundary. An oracle can make false data authoritative
 onchain; an indexer can show users an incorrect view even when the chain itself
 is correct.
 
+Their directions are different. An oracle moves a claim **into** a state
+transition: once a lending contract accepts a price, that value can authorize
+borrowing or liquidation. An indexer moves chain data **out** into a query
+model: a wrong dashboard does not normally change contract storage, but it can
+mislead users, compliance systems, accounting, or automated offchain actions.
+This difference determines how quickly an error becomes irreversible and which
+controls belong in the consuming application.
+
+| Component | Input | Output | Primary failure consequence |
+|---|---|---|---|
+| Input oracle | External observation or attestation | Onchain value | Incorrect state transition |
+| Output oracle | Onchain event or state | External instruction | Incorrect offchain action |
+| Indexer | Blocks, receipts, logs, traces, metadata | Searchable derived database | Incorrect view or decision |
+| RPC provider | Node methods and local chain view | Raw or simulated response | Censorship, stale state, or false response if unverified |
+
 ## The Oracle Problem
 
 A blockchain can verify:
@@ -39,6 +54,18 @@ The oracle problem is how to import such claims with acceptable:
 
 Cryptographic authentication proves that a source signed data, not that the
 source measured reality correctly.
+
+The problem has two nested layers. First, somebody must define the fact: which
+venues, timestamp, currency, legal entity, reserve account, or event condition
+counts? Second, the system must transport the resulting observation without
+tampering or outage. Threshold signatures can improve the second layer while
+leaving the first centralized. Conversely, several independent data vendors can
+still fail together if all calculate from the same thin exchange.
+
+This is why "decentralized oracle" is incomplete without specifying
+decentralization of measurement, delivery, administration, and consumption.
+The consuming contract ultimately determines whether a report is accepted and
+what happens when it is missing.
 
 ## Oracle Categories
 
@@ -95,6 +122,14 @@ when needed. The contract verifies signature, timestamp, and feed identity.
 This reduces continuous publication cost and improves granularity, but consumers
 must supply valid data and handle expiry.
 
+Push and pull feeds also allocate liveness responsibility differently. With a
+push feed, the oracle network pays to keep a shared onchain value current even
+when no consumer transacts. With a pull feed, the user or application obtains a
+recent signed report and brings it into the transaction. The pull model avoids
+unused updates but must define who retrieves reports, how the transaction
+behaves if a report expires, and whether all users have equal access to the
+offchain distribution channel.
+
 ### Request-Response
 
 A contract emits a request; oracle nodes perform work and later deliver a
@@ -137,6 +172,19 @@ Decentralization has several layers:
 
 Ten nodes querying one API are not ten independent sources.
 
+Independence should be tested for common failure domains:
+
+- several venue prices may ultimately depend on the same dominant market;
+- different APIs may purchase the same underlying vendor dataset;
+- separate node operators may run in one cloud region;
+- one multisignature may control all feed contracts;
+- all consumers may use the same proxy address and fallback;
+- correlated software can mis-handle the same edge case.
+
+Aggregation reduces idiosyncratic failures only when inputs can fail
+independently. It cannot average away a shared definition error or common
+dependency.
+
 ## Price Construction
 
 There is no uniquely correct price for every financial purpose. The last trade
@@ -155,6 +203,18 @@ An oracle must define:
 - timestamp and market hours;
 - treatment of depegs and venue outages;
 - update threshold.
+
+For example, "ETH/USD" could mean the last ETH trade against dollars on one
+exchange, a volume-weighted spot index across ETH/USD and ETH/USDT markets, or
+the dollar value implied by an ETH/stablecoin pool and a separate stablecoin/USD
+feed. These constructions behave differently during a stablecoin depeg or venue
+outage. The feed name alone does not specify the exposure.
+
+The correct measure depends on use. A lending protocol needs a manipulation-
+resistant collateral value and may accept some latency. A perpetual exchange
+needs a mark that tracks the tradable market quickly without allowing a single
+thin venue to trigger liquidations. An issuer's redemption contract may need
+the legally defined official rate even when it lags live trading.
 
 ### Median
 
@@ -196,6 +256,15 @@ Consumers should validate:
 - sequencer or chain status where relevant.
 
 A value can be correctly signed and dangerously stale.
+
+Suppose a collateral price is 100 and the feed updates after a 1% deviation or
+one-hour heartbeat. Thirty minutes after the last update, the external market
+falls abruptly to 85. The onchain value can remain 100 until reporters observe,
+aggregate, transmit, and finalize an update. A consumer checking only that the
+value is less than one hour old accepts it according to the stated heartbeat
+yet materially overvalues collateral. Maximum age, deviation rules, market
+volatility, chain congestion, and liquidation latency must be analyzed
+together.
 
 ## Oracle Manipulation
 
@@ -247,6 +316,27 @@ Fallbacks are not automatically safer. A secondary feed can share the same
 sources, be less liquid, or diverge during stress. A pause protects solvency but
 can deny legitimate withdrawals.
 
+Controls also interact. A tight circuit breaker limits sudden manipulation but
+can deliberately preserve a stale value during a real crash. Taking the median
+of two different oracle networks is ill-defined because there is no middle
+observation and their timestamps may differ. Pausing new borrowing while
+allowing repayment reduces risk differently from pausing all operations.
+Fallback design should specify a state machine rather than simply naming a
+backup:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Normal
+    Normal --> Degraded: feed stale or divergent
+    Degraded --> Normal: healthy observations resume
+    Degraded --> Restricted: threshold or timeout exceeded
+    Restricted --> Recovery: governance or objective recovery rule
+    Recovery --> Normal: reconciled value and monitored restart
+```
+
+Each state should define which operations remain safe: repay, add collateral,
+withdraw, borrow, liquidate, settle, or redeem.
+
 ## Chainlink As A Principal Implementation
 
 Chainlink Data Feeds use decentralized oracle networks to aggregate reports and
@@ -262,6 +352,13 @@ At a conceptual level:
 
 Offchain reporting reduces gas relative to every node posting separately while
 retaining a quorum-signed report.
+
+The onchain contract verifies that the report was authorized under its current
+configuration; it does not independently query exchanges. Consumers normally
+read through a proxy so the underlying aggregator can change across phases.
+That architecture makes feed-address verification, phase-aware round handling,
+and monitoring of configuration changes part of integration—not merely
+deployment-time checks.
 
 ### Consumer Checks
 
@@ -312,6 +409,14 @@ verified assets
 
 An onchain balance proves neither legal ownership nor absence of borrowing,
 pledges, undisclosed liabilities, or temporary balance arrangements.
+
+Asset and liability scope must use the same perimeter. Showing one custodian
+account while tokens are issued by several affiliates does not establish
+coverage. Assets may be restricted, encumbered, or junior to other claims;
+liabilities may exclude pending redemptions or off-balance-sheet obligations.
+Point-in-time evidence can also be window-dressed through short-term borrowing.
+A useful attestation identifies entity, accounts, asset rights, liability
+population, valuation method, timestamp, frequency, and assurance provider.
 
 Proof-of-reserve feeds can support circuit breakers but inherit source,
 attestation, timing, legal, and oracle risk.
@@ -379,6 +484,31 @@ flowchart LR
 
 An indexer is normally offchain. Its database is not consensus state.
 
+Raw chain data does not contain every concept analysts want. A log may record
+token amounts and addresses but not the USD value, beneficial owner, protocol
+category, or economic meaning of a multi-step transaction. Those fields require
+prices, labels, ABIs, traces, and classification rules. The resulting table can
+be useful and reproducible while still being an interpretation rather than a
+native chain fact.
+
+### Events, Calls, Traces, And State
+
+An indexer can observe several related but non-equivalent data sources:
+
+| Source | What it records | Important limitation |
+|---|---|---|
+| Transaction | User-authorized top-level input | Does not list every nested call |
+| Receipt and logs | Execution status, gas, emitted events | Contracts choose what events to emit |
+| Execution trace | Internal calls and opcode-level behavior | Node-specific APIs and high processing cost |
+| State query | Value at a selected block | Historical access may require archive infrastructure |
+| Contract bytecode/ABI | Executable code and decoding schema | Proxy logic and ABI versions can change |
+
+An event is not automatically a complete accounting record. A contract can
+change storage without emitting an event, emit an event before a later revert
+(the reverted receipt will not retain it canonically), or emit fields whose
+meaning changes after an upgrade. Robust pipelines reconcile events with state
+and protocol-specific invariants where material.
+
 ## Explorers
 
 Block explorers combine node data, indexing, ABI decoding, address labels,
@@ -444,6 +574,12 @@ Subgraphs are reproducible transformations, but errors in:
 
 can produce incorrect views.
 
+Mappings should be deterministic because independent indexers need to derive
+the same entities from the same chain data. External web requests and local
+time would break reproducibility. Even deterministic code can encode the wrong
+business definition, however, so schema and mapping changes should be versioned
+and historical metrics recalculated or clearly separated.
+
 ## Dune And SQL Analytics
 
 SQL analytics platforms ingest raw and decoded blockchain data into queryable
@@ -481,6 +617,12 @@ methodology are reviewed.
 
 Applications should preserve provenance rather than flattening every value into
 one database column.
+
+Provenance answers: who asserted this value, from which raw record, under which
+transformation, at what chain height and wall-clock time, using which software
+version? For a USD-denominated transfer metric, lineage might include a token
+event, token-decimal metadata, an address classification, and a price feed.
+Changing any one can alter history without any blockchain reorganization.
 
 ## Reorganizations
 
@@ -526,6 +668,23 @@ Possible assurance mechanisms include:
 
 Proofs increase assurance only if the verifier trusts the block root and the
 query statement correctly represents the intended question.
+
+A Merkle proof can establish that a storage slot had particular bytes under a
+committed state root. It cannot prove that the slot means "fully collateralized
+reserves" unless contract semantics, proxy configuration, token rights, and
+offchain claims support that interpretation. Verifiability narrows the trusted
+computation path; it does not eliminate semantic analysis.
+
+### Section Summary
+
+| Question | Oracle focus | Indexer focus |
+|---|---|---|
+| Meaning | Exact external fact and measurement rule | Exact derived metric and classification rule |
+| Freshness | Timestamp, heartbeat, deviation, delivery latency | Ingestion lag, finality lag, refresh schedule |
+| Correctness | Source and operator independence, aggregation | Decode, mapping, state reconciliation |
+| Reversibility | Often changes onchain state immediately | Reorg rollback and derived-data recomputation |
+| Governance | Feed configuration, proxy, reporters, fallback | Schema, mappings, labels, provider versions |
+| Verification | Signatures, proofs, source attestations | Block hashes, receipts, storage proofs, reproducible queries |
 
 ## Analytical Checklist
 

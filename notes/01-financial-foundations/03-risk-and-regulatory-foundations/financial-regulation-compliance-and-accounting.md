@@ -37,6 +37,14 @@ access and efficiency while creating new opacity and operational dependency.
 
 ## Regulatory Objectives
 
+The objectives can conflict. Requiring every provider to hold substantial fixed
+capital may reduce failure risk but exclude smaller entrants and concentrate the
+market. Immediate public disclosure of an emerging liquidity problem may improve
+transparency but accelerate a run. Strong transaction privacy protects customers
+but can make financial-crime investigation harder. Regulation is therefore an
+institutional process for balancing public objectives, not a single optimization
+formula.
+
 Common objectives include:
 
 - safety and soundness;
@@ -55,6 +63,12 @@ Authorities weigh these objectives differently according to mandate.
 
 ## The Regulatory Perimeter
 
+The perimeter answers two questions: which rulebook applies, and which authority
+can supervise or enforce it? Modern financial groups make this difficult because
+one customer journey may involve a bank account, securities broker, payment
+institution, custodian, cloud provider, and an offshore venue. The customer sees
+one application, but the law sees several entities and activities.
+
 Rules often attach to:
 
 - an **entity**: bank, insurer, broker-dealer, payment institution, fund,
@@ -69,6 +83,13 @@ Rules often attach to:
 A company can fall under several regimes at once. Labeling a product "DeFi,"
 "utility token," or "technology service" does not determine its legal status.
 Authorities generally examine function, rights, control, and actual conduct.
+
+**Example.** A technology company lets users hold a dollar balance, transfer it
+to merchants, earn a return, and invest it automatically. The balance could
+implicate deposit-taking, e-money or payment safeguarding; the return feature
+could add lending or investment regulation; automated investment can add
+brokerage or advisory duties. Calling the application a “wallet” does not resolve
+any of those functions.
 
 ### Authorization And Licensing
 
@@ -112,6 +133,19 @@ Leverage ratio
 Accounting equity and regulatory capital differ. Regulatory rules apply
 deductions, eligibility criteria, tiers, buffers, and transitional treatment.
 
+Capital quality matters because a loss absorber must remain available under
+stress. Common equity can absorb losses while the institution continues
+operating; some subordinated instruments absorb loss only after a trigger or in
+resolution. Goodwill and certain deferred tax assets may be deducted because they
+may not provide realizable resources when the firm fails.
+
+Risk-weighted ratios and leverage ratios solve different model problems.
+Risk-weighting distinguishes, for example, a secured high-quality exposure from
+an unsecured speculative one, but depends on classifications and models. The
+leverage ratio ignores those distinctions and limits total balance-sheet
+expansion. Buffers above minimum requirements create room to absorb stress,
+although distributions may be constrained as buffers are used.
+
 ### Liquidity
 
 Liquidity frameworks address short-term stress and structural funding. Common
@@ -126,6 +160,13 @@ concepts include:
 - contingency funding.
 
 Capital does not substitute for operationally available liquidity.
+
+The liquidity coverage ratio is designed around survival through a short,
+specified stress using high-quality liquid assets against net cash outflows. The
+net stable funding ratio addresses a longer structural question: whether the
+stability of funding is appropriate for the liquidity and maturity of assets.
+Neither ratio guarantees survival in every run, and both depend on assumptions
+about outflows, asset monetization, legal transferability, and market access.
 
 ### Large Exposures And Concentration
 
@@ -155,6 +196,12 @@ Supervisors assess:
 
 ### Supervisory Review
 
+Rules cannot enumerate every risk or business model. Supervisory review tests how
+an institution applies the framework in practice and whether minimum rules are
+sufficient for its particular risk profile. A rapidly growing lender with weak
+data and concentrated funding may require stronger governance, capital, or
+liquidity even if its reported ratios currently exceed minima.
+
 Supervision can combine:
 
 - regulatory reports;
@@ -169,6 +216,12 @@ Supervision can combine:
 Supervisors can impose higher requirements, restrict activities, require
 capital or liquidity, replace management where law permits, or initiate
 resolution.
+
+Supervision is continuous and evidence-based. Reporting provides routine data;
+onsite work tests source records and controls; stress tests reveal sensitivity;
+and remediation tracks whether identified weaknesses are corrected. Enforcement
+addresses breaches, while ordinary supervision aims to correct weakness before
+failure.
 
 ### Microprudential And Macroprudential
 
@@ -187,10 +240,50 @@ Macroprudential tools can include:
 An action that is prudent for one institution—selling assets quickly—can be
 destabilizing if every institution does it simultaneously.
 
+## Recovery, Resolution, And Deposit Protection
+
+Prudential regulation lowers the probability and impact of failure; it does not
+assume failure is impossible. **Recovery** is management action intended to
+restore a stressed but viable firm, such as raising capital, selling a business,
+reducing risk, or activating contingency funding. **Resolution** is the use of
+public-authority powers after a firm is failing or likely to fail, with the aim
+of maintaining critical functions and allocating losses without relying on
+ordinary insolvency alone.
+
+Resolution tools can include transferring deposits and sound assets to another
+institution, creating a bridge institution, selling business lines, writing down
+or converting eligible liabilities, and imposing a temporary stay on certain
+termination rights. The available tools and creditor hierarchy are
+jurisdiction-specific. Resolution does not mean every creditor is protected; it
+creates an orderly mechanism for deciding who bears loss while preserving
+critical services where possible.
+
+Deposit insurance protects eligible depositors up to defined limits and can
+reduce incentives for destabilizing runs. It is not a blanket guarantee of every
+balance, investment product, token, or payment wallet. Coverage depends on the
+institution, account, depositor, currency, ownership structure, and national
+scheme. A payment balance safeguarded outside a bank may be protected through
+segregation rather than deposit insurance, producing a different recovery path.
+
+| Failure framework | Primary actor | Objective | Important limitation |
+|---|---|---|---|
+| Recovery | Firm management and board | Restore viability before failure | Actions may be infeasible in market-wide stress |
+| Resolution | Resolution authority | Preserve critical functions and allocate loss | Creditors and investors can still lose |
+| Deposit insurance | Deposit insurer and safety-net authorities | Protect covered depositors and confidence | Coverage is capped and legally scoped |
+| Ordinary insolvency | Court or insolvency administrator | Realize assets and distribute under priority | May be too slow for critical financial services |
+
 ## Conduct And Consumer Protection
 
 Conduct regulation addresses how products are designed, marketed, sold, and
 serviced.
+
+The lifecycle begins before a sale. Product governance identifies the target
+market, the need being served, foreseeable misuse, cost, and distribution
+strategy. Distribution controls determine whether the product is appropriate or
+suitable for a particular customer. Servicing, complaints, and redress reveal
+whether the original design produces fair outcomes. A disclosure delivered at
+purchase cannot cure a product whose incentives or mechanics predictably cause
+harm.
 
 Core concerns include:
 
@@ -236,6 +329,12 @@ The framework can cover:
 
 ### Issuance
 
+Primary-market rules reduce the information gap between an issuer and investors.
+Investors need to understand both the enterprise and the legal rights of the
+instrument: payment priority, voting, dilution, maturity, security, covenants,
+and use of proceeds. Ongoing disclosure matters because the issuer's condition
+changes after the original offering.
+
 Issuers may need a prospectus or disclosure document describing:
 
 - business and governance;
@@ -254,13 +353,34 @@ Rules prohibit or control insider dealing, manipulation, false disclosure,
 misuse of orders, and conflicts. Market surveillance and transaction reporting
 support enforcement.
 
+Market integrity protects the price-formation process. A manipulative order can
+mislead others without executing; wash trades can fabricate volume; an insider
+can trade on material non-public information; and a venue can misuse confidential
+client orders. Surveillance therefore combines orders, executions, identities,
+communications, positions, and cross-venue data rather than reviewing completed
+trades alone.
+
 ### Intermediary Duties
 
 Broker, dealer, adviser, exchange, and custodian duties differ. Whether a firm
 acts as agent or principal affects disclosure, best execution, conflicts, and
 capital.
 
+An agent is expected to pursue the client's mandate and disclose relevant
+conflicts. A dealer trades from its own inventory and may profit from the spread,
+creating a principal relationship rather than pure agency. An adviser recommends
+or manages investments; a custodian safeguards and administers assets. Combining
+roles is common, but customers must be able to understand when the firm's
+economic interest changes.
+
 ## Payments And E-Money Regulation
+
+Payment regulation protects both the user-facing transfer and the infrastructure
+that completes it. User rules allocate liability for unauthorized payments,
+require information on fees and timing, and establish complaint or refund rights.
+Institutional rules govern safeguarding, access, security, outsourcing, and
+incident reporting. System-level rules address settlement finality, participant
+default, liquidity, and operational continuity.
 
 Payments frameworks can regulate:
 
@@ -277,6 +397,13 @@ Payments frameworks can regulate:
 Deposit-taking is usually reserved for banks. E-money or safeguarded payment
 balances may look similar to deposits operationally but have different balance
 sheet, insurance, and resolution treatment.
+
+A bank deposit is generally a liability used by the bank in its balance-sheet
+activities, subject to banking capital, liquidity, and resolution rules. A
+safeguarded e-money balance is commonly expected to be backed and separated
+under a payments regime rather than intermediated as an ordinary bank loan book.
+The precise distinction varies by jurisdiction, but the economic and insolvency
+questions should never be inferred from the interface alone.
 
 Systemically important payment systems are also subject to risk-management and
 finality standards such as the PFMI.
@@ -376,6 +503,13 @@ Compliance requires more than a policy document.
 
 ### Regulatory Change
 
+Regulatory change is not complete when a legal memo is circulated. The
+institution must translate a source into affected legal entities, products,
+contracts, data fields, system behavior, customer communications, reports, and
+training. It must also distinguish an enacted law from a proposal, guidance,
+speech, court decision, or enforcement settlement because these sources have
+different authority and implementation consequences.
+
 The process should:
 
 1. identify new and amended obligations;
@@ -411,7 +545,21 @@ in the primary statements. It depends on applicable standards, the nature of
 rights and obligations, relevance, faithful representation, and measurement
 uncertainty.
 
+Recognition is distinct from disclosure and custody. Holding an asset for a
+customer does not automatically make it the custodian's asset; controlling an
+asset economically can require recognition even when legal title sits in a
+special-purpose vehicle. Derecognition is equally important: transferring a token
+or receivable does not remove it from the balance sheet if the transferor retains
+substantially relevant rights, obligations, or control under the applicable
+standard.
+
 ### Measurement
+
+Measurement determines the number attached after recognition. Historical cost
+anchors the amount to an original transaction; amortized cost subsequently
+reflects repayments, effective interest, and impairment; fair value updates the
+amount to a current market-participant measure. The selected basis changes when
+gains and losses appear and how volatile the reported balance sheet becomes.
 
 Common bases include:
 
@@ -424,6 +572,12 @@ Common bases include:
 
 The same economic instrument can be measured differently depending on business
 model, contractual cash flows, designation, and accounting framework.
+
+Under IFRS 9, financial-asset classification considers both the business model
+for managing the asset and whether contractual cash flows are solely payments of
+principal and interest. This can lead to amortized cost, fair value through other
+comprehensive income, or fair value through profit or loss. The classification
+is an accounting result, not a statement that one asset is economically safe.
 
 ### Fair Value
 
@@ -438,6 +592,13 @@ Model-based value is not necessarily cash obtainable in a forced sale.
 Valuation adjustments can reflect bid-ask spread, credit, funding, model,
 concentration, and close-out cost.
 
+The hierarchy concerns inputs, not the inherent quality of the asset. A Level 1
+measurement uses an unadjusted quoted price in an active market for an identical
+item. Level 2 uses other observable inputs, while Level 3 relies materially on
+unobservable inputs. A model using observable yield curves may still be complex;
+a Level 3 value may be carefully governed but remains more dependent on
+assumptions.
+
 ### Accrual And Cash
 
 Accrual accounting recognizes economic events when rights and obligations
@@ -451,6 +612,13 @@ losses. Provisioning reduces accounting profit and asset carrying value or
 creates an allowance. Accounting provisions and regulatory capital serve
 related but distinct purposes.
 
+Expected credit loss is probability-weighted and reflects the timing of cash
+shortfalls, reasonable forward-looking information, and the instrument's credit
+deterioration. Recognition before an actual default responds to the problem that
+an incurred-loss approach can report credit deterioration too late. Estimates
+remain sensitive to macroeconomic scenarios, staging or credit-deterioration
+judgments, recoveries, and model governance.
+
 ### Consolidation
 
 Consolidation asks which entities are controlled and included as one reporting
@@ -459,6 +627,12 @@ contractual power, variable returns, and ability to affect returns can matter.
 
 Structured entities, funds, protocol foundations, and special-purpose vehicles
 require careful analysis.
+
+Consolidation prevents a parent from presenting only its direct legal shell while
+economically controlled assets, liabilities, income, and expenses sit elsewhere.
+It is different from prudential consolidation, which can include or exclude
+entities according to supervisory objectives. Both need a clear group map, but
+they may draw the boundary differently.
 
 ### Off-Balance-Sheet Does Not Mean No Risk
 
@@ -497,6 +671,12 @@ of future solvency or absence of fraud.
 
 ### Assertions And Evidence
 
+An assertion is management's claim embedded in a financial statement. Auditors
+design procedures around the risk that a material claim is wrong. Confirmation
+with a bank may support existence of cash; inspecting contracts may support
+rights; testing subsequent receipts may support valuation of a receivable. No
+single procedure proves every assertion.
+
 Audit procedures address assertions such as:
 
 - existence;
@@ -516,6 +696,11 @@ or control at a moment, but not necessarily:
 - correct valuation;
 - recoverability;
 - client segregation.
+
+This is why proof of reserves is not a complete financial-statement audit. It can
+support a narrow assertion about selected assets at a point in time, but may omit
+liability completeness, ownership, encumbrance, valuation, internal controls, and
+events after the snapshot.
 
 ### Materiality
 
@@ -627,3 +812,11 @@ For any financial activity:
   [IFRS 9 Financial Instruments](https://www.ifrs.org/issued-standards/list-of-standards/ifrs-9-financial-instruments/)
 - International Auditing and Assurance Standards Board,
   [International Standards on Auditing](https://www.iaasb.org/publications/2025-handbook-international-quality-management-auditing-review-other-assurance-and-related-services)
+- Financial Stability Board,
+  [Key Attributes of Effective Resolution Regimes for Financial Institutions](https://www.fsb.org/2024/04/key-attributes-of-effective-resolution-regimes-for-financial-institutions-revised-version-2024/)
+- International Association of Deposit Insurers,
+  [Core Principles for Effective Deposit Insurance Systems](https://www.iadi.org/what-we-do/policy/core-principles/)
+- IFRS Foundation,
+  [IFRS 13 Fair Value Measurement](https://www.ifrs.org/issued-standards/list-of-standards/ifrs-13-fair-value-measurement/)
+- IFRS Foundation,
+  [IFRS 10 Consolidated Financial Statements](https://www.ifrs.org/issued-standards/list-of-standards/ifrs-10-consolidated-financial-statements/)

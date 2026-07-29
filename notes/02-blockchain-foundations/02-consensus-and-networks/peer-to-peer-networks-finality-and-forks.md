@@ -22,6 +22,22 @@ sufficiently final.
 Running a wallet or RPC connection does not necessarily mean independently
 validating the chain. Many applications trust remote nodes.
 
+These roles answer different questions. A validator influences consensus but
+may rely on separate software and storage to execute transactions. A
+non-validating full node has no block-production weight yet can reject invalid
+history independently and serve data to its operator. An archive node provides
+historical query depth, not extra voting power. "Number of nodes" is therefore
+not a sufficient decentralization or security measure without knowing their
+roles, operators, implementations, and network positions.
+
+| Role | Independently checks current rules? | Proposes or votes? | Retains arbitrary historical state? |
+|---|---|---|---|
+| Full node | Yes | Not necessarily | Not necessarily |
+| Validator/miner | Normally yes, directly or through paired clients | Yes | Not necessarily |
+| Archive node | Yes | Not necessarily | Yes |
+| Light client | Checks selected proofs and consensus evidence | No | No |
+| Unverified RPC consumer | No | No | Provider-dependent |
+
 ## Peer Discovery
 
 A new node must find peers. Mechanisms include:
@@ -36,6 +52,15 @@ A new node must find peers. Mechanisms include:
 Bootstrap nodes introduce the network but need not remain trusted for block
 validity if the node verifies all data. Discovery still creates availability and
 eclipse-attack risks.
+
+Bootstrapping separates **finding a peer** from **trusting chain data**. A DNS
+seed can give a new Bitcoin node candidate addresses without deciding which
+transactions are valid. The node connects to several peers, requests headers
+and blocks, and checks proof of work and transaction rules itself. A malicious
+seed can delay or isolate the node by supplying only attacker-controlled
+addresses, but it cannot make an invalid block pass local validation. This is
+why address diversity and multiple discovery paths matter even in a
+cryptographically verified protocol.
 
 ### Peer Identity
 
@@ -68,6 +93,18 @@ Nodes validate before relaying to avoid amplifying invalid traffic. Validation
 is often staged: cheap format and signature checks first, expensive execution
 later.
 
+Gossip is redundant by design. A message travels along many paths so the
+network does not depend on a central broadcaster; duplicate suppression and
+peer scoring keep that redundancy bounded. Request-response complements it:
+gossip announces or rapidly disseminates recent objects, while direct requests
+fill gaps, synchronize history, or obtain large data only when needed.
+
+Propagation is not the same as broadcast to every node. Protocols often aim for
+rapid reach among well-connected participants, after which the message
+continues through the topology. A node's view is always local and time-specific.
+This fact explains different mempools, short-lived competing heads, and why
+network monitoring from one location cannot observe the complete system.
+
 ## Propagation
 
 Propagation delay is the time for data to reach relevant participants. It
@@ -89,6 +126,14 @@ to another head or miss its duty.
 This creates pressure toward high-bandwidth infrastructure and geographic
 proximity, which can undermine decentralization if blocks become too large or
 slot times too short.
+
+Block capacity and block interval interact. Increasing capacity may process
+more transactions per block, but larger messages take longer to transmit,
+validate, and reconstruct. Shortening intervals gives participants less time
+to receive and verify each proposal. Operators with strong connectivity then
+experience fewer stale blocks or missed votes than home or geographically
+distant operators. Throughput cannot be evaluated independently of the
+hardware and network conditions required to remain competitive.
 
 ## The Mempool
 
@@ -119,6 +164,13 @@ Nodes can check:
 
 Mempool policy can be stricter than consensus. A transaction not relayed by
 ordinary nodes might still be consensus-valid if a block producer includes it.
+
+This distinction gives nodes a local anti-abuse layer without changing global
+validity. Bitcoin "standardness" policy, for example, can decline to relay
+unusual but consensus-valid scripts. Fee floors and eviction protect finite
+memory. Because producers can adopt different policies or receive transactions
+privately, absence from one public mempool does not prove that a transaction
+cannot be included.
 
 ### Ordering
 
@@ -194,6 +246,19 @@ Fork choice and finality are distinct:
 - finality identifies history that cannot revert without violating explicit
   safety assumptions.
 
+A protocol may have three useful states rather than a binary final/not-final
+view:
+
+1. **seen or included:** the transaction appears in a currently known block;
+2. **canonical but reversible:** fork choice presently selects its branch;
+3. **finalized:** reversal would require violation of the finality assumptions,
+   extraordinary recovery, or—in probabilistic systems—an acceptably remote
+   competing-work event.
+
+User interfaces often compress these into "pending," "confirmed," and
+"finalized," but applications need the chain-specific meaning behind each
+label.
+
 ## Why Temporary Forks Occur
 
 Two valid blocks can be proposed for the same height or slot because:
@@ -240,6 +305,13 @@ Applications must handle:
 An exchange that credits and permits withdrawal too early can lose funds if the
 deposit is reorganized away.
 
+A safe offchain consumer treats block identity, not block height alone, as the
+record key. Suppose an indexer processed height 1,000 with hash H and sent a
+notification. If the canonical block at height 1,000 later has hash H2, it must
+reverse every derived record from H, ingest H2, and ensure the notification or
+downstream payment is either delayed, idempotent, or compensatable. Merely
+overwriting the row at height 1,000 leaves balances and aggregates corrupted.
+
 ## Confirmation And Probabilistic Finality
 
 In proof-of-work, confidence usually increases as more work accumulates after a
@@ -258,6 +330,13 @@ Reorganization probability depends on:
 Different transactions justify different thresholds. A small retail payment and
 a bridge minting millions of dollars should not use the same risk assumption
 without analysis.
+
+Confirmation depth is an economic risk control. Waiting longer reduces
+reorganization risk but delays use of funds and worsens user experience. The
+appropriate threshold considers the value an attacker can extract, cost of the
+attack, counterparty identity, concentration of mining or stake, and whether
+the external action can be reversed. The commonly repeated confirmation count
+for one chain should not be copied mechanically to another.
 
 ## BFT And Economic Finality
 
@@ -281,6 +360,13 @@ rule violations and destruction or social treatment of stake. It is strong but
 still depends on software, governance, key control, and the social response to
 catastrophic failure.
 
+"Economic" emphasizes that the protocol can identify and penalize signed
+contradictory behavior. It does not mean every finalized state is factually or
+legally correct: a valid transaction can exploit a contract bug, a compromised
+key can authorize theft, and an oracle can provide a wrong price. Consensus
+finality answers whether the chain will retain the state transition, not whether
+the transition represented legitimate intent.
+
 ## Safety And Liveness
 
 - **safety:** honest nodes do not finalize conflicting states;
@@ -298,6 +384,14 @@ The trade-off is governed by synchrony assumptions:
 
 Internet blockchains generally rely on partial-synchrony-style assumptions for
 strong liveness.
+
+Safety and liveness also explain why halting can be the correct outcome. If
+communication is unreliable, continuing with too little quorum could produce
+two finalized histories that cannot both be honored. A BFT protocol commonly
+refuses to finalize until enough messages arrive. Users experience an outage,
+but the system preserves a single recoverable history. Operational monitoring
+should distinguish delayed blocks, stalled finality, and conflicting finality
+because they imply very different recovery paths.
 
 ## Network Partitions
 
@@ -395,6 +489,15 @@ A new node needs a trusted starting method.
 A checkpoint is a trust input. Its distribution and freshness belong in the
 security model.
 
+Weak subjectivity arises because an attacker may acquire old validator keys
+after their stake is withdrawn and use them to sign an alternative history at
+little present economic cost. A node that has been offline too long cannot
+always distinguish that history using only current signatures. A recent
+checkpoint obtained from a trusted or socially corroborated source anchors the
+node after the period in which old validator evidence remains meaningful.
+This is different from trusting every subsequent state transition: the node
+verifies forward from the anchor.
+
 ## Client Diversity
 
 Multiple independent implementations reduce the chance that one bug controls
@@ -453,6 +556,14 @@ Onchain token voting is one mechanism, not the entirety of governance. Even
 "immutable" protocols rely on human decisions about software, interfaces,
 emergency response, and accepted chain history.
 
+An upgrade becomes operative only through a sociotechnical adoption chain.
+Authors specify a change; client teams implement it; operators choose software;
+block producers create blocks under rules; exchanges and applications decide
+which resulting asset and history they support. A formally scheduled activation
+does not force every participant to assign the same name or economic value to
+the resulting chain. This is why hard forks can be routine upgrades or lasting
+chain splits depending on coordination and disagreement.
+
 ## Finality For Applications
 
 Applications should define explicit confirmation policies based on:
@@ -477,6 +588,26 @@ Total risk includes:
 3. relayer or verifier correctness;
 4. destination execution;
 5. destination finality.
+
+The bridge's waiting rule composes these stages rather than replacing them. A
+message proven against a source block that is later reorganized can create an
+unbacked destination asset even if destination execution is flawless.
+Conversely, finalized source state does not protect against a verifier bug or
+compromised bridge key. Cross-chain applications should expose which stage is
+pending and avoid presenting destination inclusion as proof that the entire
+path is final.
+
+### Section Summary
+
+| Concept | What it establishes | What it does not establish |
+|---|---|---|
+| Peer identity | Control of a networking key | Honesty or legal identity |
+| Full validation | Compliance with local protocol rules | Correct external facts or user intent |
+| Fork choice | Present canonical head | Irreversibility |
+| Confirmations | Accumulating work or descendants | Universal certainty |
+| BFT finality | Quorum-backed state under safety assumptions | Oracle truth or bug-free execution |
+| Checkpoint | Trusted recent history anchor | Trust in every data provider |
+| Destination inclusion | Message executed on destination | Safe source finality and verifier correctness |
 
 ## Common Misconceptions
 
@@ -534,6 +665,8 @@ Total risk includes:
   [Gasper](https://ethereum.org/developers/docs/consensus-mechanisms/pos/gasper/)
 - Ethereum.org,
   [Proof-of-stake rewards and penalties](https://ethereum.org/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/)
+- Ethereum.org,
+  [Weak subjectivity](https://ethereum.org/developers/docs/consensus-mechanisms/pos/weak-subjectivity/)
 - Ethereum Consensus Specifications,
   [Phase 0 Beacon Chain](https://github.com/ethereum/consensus-specs/tree/dev/specs/phase0)
 - libp2p,

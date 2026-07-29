@@ -28,6 +28,30 @@ Trading is only one stage of the lifecycle. See
 [Financial Market Infrastructure](financial-market-infrastructure.md) for
 clearing, CCPs, CSDs, custody, and settlement.
 
+These functions are interdependent. A market can match orders quickly yet still
+be economically unusable if participants cannot fund positions, trust the
+settlement asset, borrow securities for delivery, or enforce trades after a
+default. Conversely, reliable post-trade infrastructure does not create
+liquidity by itself: somebody must be willing to hold inventory, expose a
+quote, or wait for the other side of a trade.
+
+Market quality is multidimensional. A useful market produces prices that
+incorporate available information, lets participants trade reasonable size at
+reasonable cost, treats comparable orders consistently, remains available
+during stress, and completes the resulting obligations. Improving one
+dimension can weaken another. More pre-trade transparency can strengthen price
+comparison while exposing a large investor's intentions; faster execution can
+increase operational and latency risk; very small ticks can make prices more
+precise while reducing the reward for displaying liquidity.
+
+| Market function | Economic question | Typical failure |
+|---|---|---|
+| Price discovery | What price balances current supply and demand? | Stale or manipulable reference prices |
+| Liquidity | Can risk be transferred at tolerable cost? | Wide spreads, little depth, or no firm quotes |
+| Allocation | Which orders trade, and in what sequence? | Unfair access or unpredictable priority |
+| Integrity | Can participants rely on prices and rules? | Manipulation, conflicts, or selective disclosure |
+| Completion | Do matched trades become final positions and cash flows? | Settlement failure or counterparty default |
+
 ## Participants And Roles
 
 ### Investor
@@ -42,10 +66,23 @@ A broker acts as agent, seeking execution for a client. It may route orders,
 provide algorithms, aggregate venues, arrange block trades, and charge
 commission or embedded spread.
 
+Agency changes the economic problem. The broker is spending the client's money
+and must balance price, speed, likelihood of execution, information leakage,
+and other costs according to the order and applicable duties. A broker that
+also operates a venue, receives routing payments, or trades as principal has
+conflicts that require disclosure and controls; the cheapest explicit
+commission need not produce the lowest total execution cost.
+
 ### Dealer
 
 A dealer trades as principal, buying or selling for its own account. It provides
 immediacy but assumes inventory and adverse-selection risk.
+
+The distinction between broker and dealer describes the role in a transaction,
+not merely the firm's name. The same firm can act as agent for one order and as
+principal for another. Principal trading replaces an agency commission with a
+price quoted from the firm's inventory and changes the conflicts, capital use,
+and counterparty relationship.
 
 ### Market Maker
 
@@ -146,6 +183,30 @@ produce execution far from the stop trigger.
 Order behavior depends on venue rules. Identical labels can hide different
 priority and trigger semantics.
 
+### The Order Lifecycle
+
+An order is an instruction, not yet a trade. Before reaching a matching engine,
+it may pass through authentication, buying-power or position checks, credit and
+fat-finger limits, sanctions or market-access controls, and a routing decision.
+The venue then accepts, rejects, reprices, rests, or executes it. Each execution
+creates trade records that must be confirmed, cleared where applicable,
+allocated to the correct account, and settled.
+
+A limit order also changes roles over its life. A buy limit posted below the
+ask supplies liquidity while it waits. If the market falls and an incoming sell
+order executes against it, the same instruction becomes a completed purchase.
+The price protection was real, but the fill may arrive precisely because other
+participants now believe the asset is worth less. This is the execution-risk
+versus adverse-selection trade-off of passive trading.
+
+| Instruction | What it controls | What it leaves uncertain |
+|---|---|---|
+| Market order | Priority on immediate execution | Final price and total slippage |
+| Limit order | Worst acceptable execution price | Whether and when it fills |
+| Stop-market order | Trigger for urgent execution | Price after activation |
+| Stop-limit order | Trigger and price boundary | Execution after a gap |
+| Iceberg order | Displayed quantity | Discovery of hidden size and full fill |
+
 ## The Central Limit Order Book
 
 A central limit order book ranks bids and asks. A common priority is:
@@ -182,6 +243,18 @@ VWAP_execution
 
 The difference between expected and realized price is one form of slippage.
 
+This example also distinguishes **quoted liquidity** from **available
+liquidity**. The best ask displays only 25 units. A buyer of five units sees and
+pays 100.10; a buyer of 60 units walks two price levels and pays an average of
+100.1583; a still larger buyer would reach 100.30. There is no single spread
+independent of trade size.
+
+Queue position matters even when price does not. A new buy order at 100.00
+normally joins behind the 30 units already displayed there under price-time
+priority. It can lose its place if cancelled and resubmitted. This creates an
+economic value for early placement, motivates fast order management, and
+explains why displayed depth can change rapidly without a trade.
+
 ```mermaid
 flowchart LR
     Orders["Incoming orders"]
@@ -209,6 +282,13 @@ Orders accumulate and the venue selects a clearing price that maximizes
 executable volume subject to tie-break rules. Opening, closing, volatility, and
 periodic auctions concentrate liquidity and can improve price discovery when
 continuous trading is thin.
+
+An auction trades immediacy for coordination. Instead of rewarding the first
+participant to react by a fraction of a second, it pools interest over a time
+window and produces one clearing price. Closing auctions are important because
+fund valuations and index tracking often use official closing prices; that same
+concentration makes auction imbalance information and control of the closing
+process economically significant.
 
 ### Request For Quote
 
@@ -242,6 +322,13 @@ High daily volume does not guarantee liquidity for a large urgent order during
 stress. Reported volume can include repeated interdealer trading, wash activity,
 or small trades that say little about executable depth.
 
+These dimensions can move differently. An instrument may have a one-tick
+spread but only trivial displayed size, or deep quotes that disappear when a
+participant attempts to trade. **Latent liquidity**—interest that is not
+displayed but may respond to an RFQ or price move—matters particularly in bond
+and block markets. Liquidity measurement must therefore specify instrument,
+venue, trade direction, size, time horizon, and market state.
+
 ### Market Impact
 
 A large order moves price because it consumes liquidity and reveals possible
@@ -253,6 +340,15 @@ information. Total execution cost includes:
 - market impact;
 - opportunity cost of unfilled quantity;
 - tax and clearing cost.
+
+Impact has temporary and persistent components. Temporary impact compensates
+liquidity suppliers for taking the other side and may reverse after the order
+ends. Persistent impact reflects information inferred from the trade or a
+lasting change in supply and demand. In practice the two cannot be observed
+perfectly, so execution algorithms divide an order over time and continuously
+trade off urgency against footprint. Trading too quickly consumes depth;
+trading too slowly increases exposure to unrelated market movement and the
+chance that other participants infer the order.
 
 ### Implementation Shortfall
 
@@ -272,6 +368,21 @@ quantity valued at a later price, `Q` is intended quantity, and
 
 The framework separates execution performance from whether the investment idea
 was good.
+
+For example, suppose an investor decides to buy 1,000 shares when the reference
+price is 50.00. It buys 700 at an average 50.08, leaves 300 unfilled, and the
+evaluation price later reaches 50.20. Ignoring fees:
+
+```text
+Executed cost above decision price = 700 × (50.08 - 50.00) = 56
+Opportunity cost on unfilled shares = 300 × (50.20 - 50.00) = 60
+Total implementation shortfall = 116
+```
+
+The price increase may validate the investment decision while still showing
+that incomplete and costly execution surrendered 116 of value relative to
+instantaneous execution at the decision price. The benchmark is hypothetical,
+not a claim that all 1,000 shares were actually available at 50.00.
 
 ## Price Discovery
 
@@ -296,12 +407,37 @@ Crypto markets demonstrate these limits clearly. The same asset can trade at
 different prices across exchanges because balances cannot move instantly, fiat
 rails close, withdrawal is suspended, or the venue itself is risky.
 
+Price discovery can migrate by time of day and information type. A futures
+market may react first to macroeconomic news because it is liquid and
+capital-efficient; the cash securities then adjust through arbitrage. A dealer
+market may reveal information through executable quotes even when public trade
+volume is low. A reference price should therefore be evaluated for
+representativeness, robustness, and susceptibility to manipulation rather than
+selected solely because it is easy to obtain.
+
 ## Information And Adverse Selection
 
 A liquidity provider risks trading against someone with better information.
 After selling to an informed buyer, the price may rise; after buying from an
 informed seller, it may fall. This **adverse selection** is a central reason
 spreads widen around news or uncertainty.
+
+A useful conceptual decomposition of the spread is:
+
+```text
+Spread compensation
+= order-processing cost
++ inventory and funding cost
++ adverse-selection cost
++ capital and risk compensation
+- venue incentives
+```
+
+This is not an accounting identity; the components are estimated from behavior.
+It explains why a spread can widen even when processing technology is
+unchanged. Before an earnings release, for example, the probability that an
+incoming order reflects superior information rises, so a market maker demands
+more protection or quotes less size.
 
 Market makers respond by:
 
@@ -345,6 +481,13 @@ Routing factors include:
 Fragmentation can increase competition but split liquidity and complicate the
 definition of a consolidated best price.
 
+The router faces a sequential decision. It can send the whole order to the
+venue showing the best price, split across venues, expose hidden liquidity,
+internalize, or wait. Displayed quotations may already be cancelled by the time
+the message arrives, and accessing several venues can reveal the remaining
+order. A nominally inferior price can therefore produce a better outcome if it
+has a much higher probability of filling or lower downstream cost.
+
 ### Internalization
 
 A broker-dealer can execute customer flow against its own inventory or match it
@@ -356,6 +499,12 @@ conflicts between agency duty and principal profit.
 Some venues charge orders that remove liquidity and rebate orders that add it.
 Quoted spread can therefore differ from the economically realized spread after
 fees. Fee incentives may also affect routing and queue competition.
+
+The core governance question is who receives each benefit and bears each cost.
+A rebate paid to the broker can conflict with the client's interest if it
+causes routing to a slower or less liquid venue. Transparent routing and
+execution-quality data help detect such conflicts, but aggregate reports do not
+prove that any particular order received its best feasible outcome.
 
 ## Execution Quality
 
@@ -385,6 +534,13 @@ Benchmarks can be gamed or inappropriate. VWAP rewards matching the market's
 volume distribution; arrival price emphasizes decision-to-execution cost;
 closing-price benchmarks can concentrate activity at the close.
 
+Execution analysis also needs like-for-like comparison. A broker handling
+small liquid equity orders cannot be compared directly with one handling block
+orders in illiquid securities. Order size, volatility, spread, urgency,
+constraints, and market direction affect achievable results. Good transaction
+cost analysis explains the benchmark, normalizes for these conditions, and
+examines the distribution of outcomes rather than only an average.
+
 ## Leverage, Margin, And Liquidation
 
 Leverage magnifies exposure relative to equity:
@@ -411,6 +567,26 @@ If asset value falls while debt remains fixed, equity falls faster:
 | Equity | 40 | 20 |
 
 A 20% asset loss caused a 50% equity loss.
+
+If maintenance equity were 25, the decline would create a margin deficit of
+five. The client must add collateral or reduce the position. Liquidation is not
+costless: the execution itself may push the price lower, fees continue to
+accrue, and the broker may still have an unsecured claim if proceeds are
+insufficient.
+
+A typical default and liquidation sequence is:
+
+1. mark positions and collateral using the governing valuation rules;
+2. calculate the margin deficiency and issue a call if the agreement permits
+   time to cure;
+3. restrict new risk or cancel open orders;
+4. close or hedge positions and realize collateral;
+5. net obligations under enforceable agreements; and
+6. allocate any residual loss through the broker, clearing member, CCP, or
+   platform waterfall.
+
+The sequence and legal rights differ across cash accounts, bilateral
+derivatives, prime brokerage, centrally cleared markets, and onchain lending.
 
 Forced liquidation can create feedback:
 
@@ -442,6 +618,14 @@ relationship creates wrong-way risk and concentration. A client failure can
 leave the broker with illiquid positions; a broker failure can trap the
 client's assets and hedges.
 
+Cross-margining illustrates both value and danger. Offsetting positions can
+reduce collateral when viewed as a portfolio, freeing funding for the client.
+The benefit depends on correlations and liquidation assumptions continuing to
+hold during stress. If positions that normally offset diverge, or if they must
+be closed at different times and venues, the apparent diversification can
+disappear. The legal ability to net claims is as important as the statistical
+model.
+
 ## Market Abuse And Surveillance
 
 Market integrity threats include:
@@ -464,6 +648,15 @@ Public blockchains make transaction records visible but do not automatically
 identify controllers, reveal offchain arrangements, or distinguish legitimate
 arbitrage from collusion.
 
+Different patterns exploit different parts of market design. Spoofing attempts
+to create a false impression of supply or demand with orders intended to be
+cancelled. Wash trading manufactures activity without genuine change in
+economic exposure. Marking the close targets a price used for valuation or
+contract settlement. Front running misuses knowledge of another party's order.
+Detection therefore requires intent and context as well as a statistical
+anomaly; a large cancellation rate alone can arise from legitimate market
+making in a fast market.
+
 ## Market Stress
 
 During stress:
@@ -480,6 +673,24 @@ During stress:
 Historical average volume and spread are poor estimates of stressed
 liquidation capacity. Stress tests should include nonlinear price impact,
 crowded exits, closed venues, reduced borrow, and delayed settlement.
+
+Market liquidity and funding liquidity reinforce each other. A leveraged
+holder facing margin calls sells assets; those sales reduce prices and
+collateral values; market makers facing larger inventory and volatility widen
+quotes; the wider quotes make liquidation more expensive and produce further
+calls. Circuit breakers and auctions can create time for information and orders
+to accumulate, but they defer rather than eliminate the need to transfer risk.
+
+### Section Summary
+
+| Design choice | Primary benefit | Main trade-off |
+|---|---|---|
+| Continuous order book | Immediate, transparent matching | Fragmented queues and speed competition |
+| Call auction | Concentrated liquidity and one clearing price | Delayed execution |
+| RFQ/dealer market | Customized size, terms, and immediacy | Dealer dependence and less pre-trade transparency |
+| Dark or hidden liquidity | Lower information leakage for large orders | Weaker visible price formation |
+| Internalization | Potential price improvement and lower venue cost | Agency-principal conflict |
+| Leverage and cross-margining | Capital-efficient exposure | Nonlinear loss and liquidation feedback |
 
 ## Centralized And Decentralized Market Design
 
@@ -541,3 +752,7 @@ For any trading venue or market:
   [Market liquidity: research findings and selected policy implications](https://www.bis.org/publ/cgfs11.htm)
 - Bank for International Settlements,
   [Repo market functioning](https://www.bis.org/publ/cgfs59.htm)
+- Bank for International Settlements,
+  [Market-making and proprietary trading: industry trends, drivers and policy implications](https://www.bis.org/publ/cgfs52.htm)
+- U.S. Securities and Exchange Commission,
+  [Disclosure of order execution and order routing information](https://www.sec.gov/about/divisions-offices/division-trading-markets/broker-dealers/disclosure-order-execution-order-routing-information)

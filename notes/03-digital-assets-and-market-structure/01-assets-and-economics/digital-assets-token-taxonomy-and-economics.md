@@ -10,9 +10,38 @@ instrument, speculative asset, collateral, and access credential. Economic,
 technical, accounting, AML, securities, tax, and property-law classifications
 may therefore differ.
 
+This is not merely a terminology problem. Classification determines which
+questions expose loss. If a token is analyzed only as software, an investor can
+miss that redemption depends on an insolvent issuer. If it is analyzed only as
+a financial claim, an integrator can miss an upgrade key that can mint
+unlimited units. If it is treated only as a traded asset, both can miss that
+liquidity comes mainly from temporary incentives.
+
+A complete analysis moves through four interacting layers:
+
+```mermaid
+flowchart LR
+    Rights["Economic and legal rights"]
+    Code["Code, ledger, and control"]
+    Market["Issuance, distribution, and liquidity"]
+    Use["Use, collateral, and dependencies"]
+    Rights --> Code --> Market --> Use
+```
+
+A legally strong claim can still be hard to transfer during a chain outage;
+flawless token code cannot create a claim against offchain reserves; and a
+liquid market does not prove redemption or long-term demand.
+
 ## A Multi-Axis Taxonomy
 
 One label is insufficient. Classify an asset along several axes.
+
+The axes are intentionally non-exclusive. WBTC, for example, is fungible,
+issued as a contract token on Ethereum, economically intended as a redeemable
+claim on custodied bitcoin, and often used as collateral. Calling it simply
+"Bitcoin" hides the custodian and token-contract layers; calling it simply an
+"ERC-20" hides the backing claim. A taxonomy is useful only when it preserves
+all material dependencies.
 
 ### Issuance Layer
 
@@ -76,6 +105,12 @@ one exclusive label.
 A native asset is part of a blockchain's protocol rather than a smart-contract
 ledger.
 
+The distinction concerns where validity is enforced. A node checks a native
+balance and issuance rule as part of the base protocol. It checks a contract
+token by executing application bytecode within that protocol. Native supply
+can still change through a network upgrade, but there is normally no separate
+token administrator able to call a mint function under the current rules.
+
 It can:
 
 - pay transaction fees;
@@ -112,6 +147,13 @@ Native assets face:
 
 A token contract maps identifiers or addresses to balances and defines
 transfer, mint, burn, approval, and metadata behavior.
+
+The ledger entry is not a physical object stored in a wallet. The contract
+stores or derives balances; a private key authorizes calls that may change
+them. Wallet software discovers the contract, queries its state, displays
+metadata, and constructs transactions. A user can therefore control spend
+authority while depending on the chain, token contract, wallet
+interpretation, and any issuer rights embedded in the code.
 
 Token standards improve interoperability but do not define:
 
@@ -264,6 +306,14 @@ The contract balance alone may not show:
 - slashing;
 - bridge failure.
 
+Receipt-token accounting should distinguish **units** from **exchange rate**.
+Some tokens increase the holder's displayed balance as income accrues; others
+keep share count fixed while each share represents more underlying assets.
+Two positions with 100 tokens can therefore have different claims, and a
+downstream protocol that assumes one token equals one underlying unit can
+misprice collateral. Redemption queues, fees, loss allocation, and rounding
+also sit outside the ticker.
+
 ## Wrapped And Bridged Assets
 
 ### Same-Chain Wrapper
@@ -317,6 +367,14 @@ The legal wrapper determines rights. Architecture can separate:
 The blockchain record may be authoritative, evidentiary, or merely operational.
 See [Tokenization Of Securities, Funds, And Real-World Assets](../../05-digital-money-and-tokenization/03-tokenized-assets/tokenization-of-securities-funds-and-real-world-assets.md).
 
+These alternatives have different consequences during conflict. If the token
+register is legally authoritative, correcting an erroneous transfer requires a
+defined legal and technical mechanism for changing that register. If an
+offchain register is authoritative, an onchain transfer may remain provisional
+until reconciled. If the token is only evidence of a claim against an SPV, the
+holder still relies on the SPV's records, custody, insolvency remoteness, and
+enforcement. "Onchain ownership" should always identify which model applies.
+
 ## Stable-Value Tokens
 
 Stablecoins target a reference value through:
@@ -342,6 +400,14 @@ failure modes. See [Stablecoins](../../05-digital-money-and-tokenization/01-stab
 Circulating supply depends on methodology. Treasury, vesting, lost, bridged,
 staked, or locked tokens may be treated differently.
 
+Supply is also chain-sensitive. Locking 100 native tokens in a bridge and
+minting 100 representations does not necessarily create 200 units of net
+economic exposure, but a naive cross-chain sum reports 200 token records. If
+the bridge representation trades independently after backing fails, the two
+prices and supplies may cease to describe one fungible asset. Analysts should
+state whether they count native units, representations, redeemable claims, or
+every contract balance.
+
 ### Market Capitalization
 
 ```text
@@ -363,6 +429,14 @@ FDV
 FDV highlights future dilution but can mislead when maximum supply is
 unreachable, emissions change through governance, or the present price depends
 on low float.
+
+For example, a token priced at 10 with 10 million circulating and 100 million
+fully diluted units has a 100 million market capitalization and 1 billion FDV.
+The 1 billion is not today's enterprise value or cash available to the project;
+it applies the marginal price of the small liquid float to units that may unlock
+years later. If unlock recipients sell, the price can change long before all
+units circulate. A useful analysis pairs FDV with unlock schedule, holder cost
+basis, liquidity, treasury needs, and expected demand.
 
 ## Issuance And Distribution
 
@@ -436,6 +510,13 @@ Holder dilution depends on whether the holder receives proportional rewards.
 A staker earning 5% while total supply grows 5% has little real token-share
 growth before fees, taxes, slashing, and compounding.
 
+Suppose 1,000 units exist and one holder owns 100, or 10%. The protocol issues
+100 new units entirely to other participants. The holder still owns 100 units
+but only 9.09% of supply. If the holder instead receives 10 of the new units,
+the proportional share remains 10%. A nominal staking yield can therefore be
+compensation for avoiding dilution rather than an economic return generated by
+fees or productive assets.
+
 ### Fee Burning
 
 If fees are burned:
@@ -491,6 +572,26 @@ Distinguish:
 Token holders do not automatically own protocol cash flows. Governance can
 redirect fees, but legal and practical ability to do so matters.
 
+Value accrual should follow actual flows:
+
+```mermaid
+flowchart LR
+    Users["Users pay fees"]
+    Costs["Validators, LPs, keepers, rebates"]
+    Treasury["Protocol treasury"]
+    Company["Company or interface"]
+    Holders["Token holders or burn"]
+    Users --> Costs
+    Users --> Treasury
+    Users --> Company
+    Treasury -. "only if authorized" .-> Holders
+```
+
+Gross fees can be economically large while nothing reaches token holders.
+Conversely, a token can capture value through required staking or fee burning
+without a conventional dividend. The analyst must identify the mechanism,
+authority to change it, and costs paid before residual value.
+
 ### Price-To-Fee Metrics
 
 Ratios using market cap and fees can compare networks, but they require:
@@ -545,6 +646,13 @@ For every token ask:
 - Does protocol control equal legal ownership?
 
 The token's name, white paper, or interface is not dispositive.
+
+Legal classification and economic description answer different questions. A
+governance token may economically resemble a control instrument without being
+corporate voting stock. A redeemable stablecoin may economically resemble
+short-term money while its legal claim and regulatory category vary by
+jurisdiction. Analysis should explain the facts and then apply each relevant
+legal framework rather than infer legal status from a marketing label.
 
 ## Technical Risks
 

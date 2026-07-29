@@ -33,6 +33,35 @@ on a chain with one sequencer.
 wallet key. Assets can still be locked in protocol contracts, transferred by an
 approval, frozen by a token issuer, or lost through a contract failure.
 
+Likewise, **permissionless** needs an object. Contract calls may be open to any
+address while the official interface blocks locations, the oracle reporter set
+is permissioned, new markets require governance approval, and block inclusion
+depends on a centralized sequencer. Useful descriptions say who may deploy,
+use, supply liquidity, liquidate, govern, validate, and operate interfaces
+rather than assigning one label to the whole system.
+
+### Financial Functions Have Not Disappeared
+
+Conventional finance bundles recordkeeping, custody, risk approval, pricing,
+liquidity, execution, settlement, governance, and dispute handling into firms
+and infrastructures. DeFi redistributes them:
+
+| Financial function | Common DeFi implementation | Residual dependency |
+|---|---|---|
+| Recordkeeping | Contract storage and chain history | Correct code, consensus, indexing |
+| Authorization | Wallet signature and contract roles | Key custody and intelligible signing |
+| Credit protection | Overcollateralization and liquidation | Oracle, liquidity, liquidators |
+| Market making | AMM pools or onchain/offchain orders | LP capital, arbitrage, transaction ordering |
+| Settlement | Atomic state transition | Chain finality and bridge assumptions |
+| Change control | Token vote, multisig, timelock | Participation, keys, delegates, legal pressure |
+| User access | Front end, wallet, API, direct call | Domains, RPCs, sequencer, compliance controls |
+
+Automation makes some rules observable and consistent, but it also executes
+mistakes at machine speed. A liquidation formula does not decide whether its
+oracle reflects an orderly market; a token vote does not by itself provide
+fiduciary judgment; and transparent code does not ensure that ordinary users
+can understand bytecode or complex balance sheets.
+
 ## The DeFi Stack
 
 ```mermaid
@@ -63,6 +92,13 @@ upgrades.
 Native coins, fungible tokens, NFTs, stablecoins, wrapped assets, and receipt
 tokens provide the balance-sheet items. Each adds issuer, bridge, redemption,
 freeze, governance, or accounting properties beyond the DeFi protocol.
+
+Each asset should be treated as somebody's balance-sheet item. A stablecoin can
+be an issuer liability backed by reserves; a vault token is a claim on strategy
+assets; a wrapped token is an obligation of a custodian or bridge; an LP token
+is a residual share of pool inventory. DeFi positions often stack these claims,
+so the visible token is not the ultimate asset and may not have direct recourse
+to it.
 
 ### Protocol layer
 
@@ -110,6 +146,13 @@ The user now depends on the chain, staking protocol, validator set, lending
 market, stablecoin, DEX, oracle, and liquidation network. The transaction may be
 simple while the economic graph is not.
 
+The balance sheet after the loop is more informative than the list of calls.
+The user owns a staking receipt and owes stablecoin debt; the lender owns a
+claim on a pool exposed to the user's collateral; the stablecoin itself may be
+another issuer's liability; and the DEX LPs absorb the inventory used to execute
+the swap. No new unencumbered capital appears merely because each claim is
+represented by a transferable token.
+
 ## Atomicity
 
 Within one blockchain transaction, all included calls normally succeed or all
@@ -123,6 +166,13 @@ If repayment fails, the whole transaction reverts. Flash loans use this property
 to lend without conventional collateral for the duration of one transaction.
 Atomicity can reduce settlement principal risk and enable arbitrage, refinancing,
 collateral swaps, and liquidations.
+
+For example, a borrower can flash-borrow 100,000 units of debt asset, repay an
+old lending position, withdraw collateral, sell part of that collateral for the
+debt asset, and repay the flash loan. If the sale produces insufficient output,
+the transaction reverts and the old position remains. Atomicity removes the
+risk of being left between those onchain steps, but the borrower still faces
+fees, MEV, oracle conditions, and failure to find a profitable route.
 
 Atomicity is scoped. It may not extend:
 
@@ -189,6 +239,25 @@ flowchart LR
 
 The graph exposes correlated points that a contract-address list misses.
 
+### Technical And Economic Composition Can Diverge
+
+A token can be technically transferable but unsuitable as collateral. Its
+redemption may be delayed, its price may rely on a shallow pool, or an issuer
+may freeze it. Conversely, two protocols may never call each other directly yet
+be economically coupled because both use the same stablecoin, collateral,
+oracle, bridge, or liquidators. The dependency graph must therefore include:
+
+- code calls and upgrade paths;
+- asset and redemption chains;
+- shared price and data sources;
+- liquidity needed for exits and liquidation;
+- governance, signers, sequencers, and infrastructure; and
+- incentives that attract the same capital.
+
+This is the recursive nature of composability risk: a protocol depends on a
+token, the token depends on a vault, the vault depends on a bridge, and the
+bridge depends on source-chain finality and a verifier set.
+
 ## Protocol Contracts and Upgradeability
 
 Blockchain code is immutable at its deployed address, but protocol behavior can
@@ -236,6 +305,21 @@ must trust the upgrade process. Intermediate controls include:
 Timelocks are not uniformly beneficial. A delay gives users warning, but it also
 slows emergency patches and advertises a vulnerability before remediation.
 
+Change control should be described as a lifecycle:
+
+1. somebody has authority to propose a code or parameter change;
+2. delegates, signers, or token holders approve it;
+3. a timelock or operational delay may apply;
+4. an executor submits the transaction;
+5. contracts verify authority and change state;
+6. monitors and users observe the result; and
+7. rollback, pause, migration, or another proposal handles errors.
+
+Weakness at any stage matters. A token vote can be broadly distributed while
+the executor key is centralized. A timelock can be visible while the emergency
+council has a bypass. A passed proposal can contain malicious calldata that
+voters did not decode.
+
 ## Oracles
 
 Smart contracts cannot independently observe external prices, rates, weather,
@@ -276,6 +360,13 @@ infrastructure is accessible. During congestion, gas cost can exceed the reward.
 Allowlisted actors improve predictability but concentrate censorship and outage
 risk. Protocols use bounties, auctions, priority fees, private order flow, or
 backstop operators to sustain liveness.
+
+Economic permissionlessness requires a viable business case for these actors.
+A liquidation function callable by anyone is not operationally decentralized
+if only one bot has the infrastructure, private transaction channel, or capital
+to use it. Conversely, a small specialist set can be resilient if roles are
+replaceable, incentives are transparent, and a backstop exists. Count actors,
+but also test concentration of revenue, infrastructure, and failure domains.
 
 ## Liquidity as Shared Infrastructure
 
@@ -323,6 +414,13 @@ Token emissions are dilution to other token holders unless financed by acquired
 value. “Protocol revenue,” “fees,” “earnings,” and “token-holder value” should
 not be used interchangeably.
 
+Consider a pool offering 12% displayed APY: 4% comes from borrower interest and
+8% from reward tokens at the current quoted price. If reward-token selling
+reduces its realizable value by half and gas, slippage, and hedging cost 2%, the
+economic return is closer to 6% before credit and smart-contract loss. The
+headline number combines cash flow, dilution-funded subsidy, price assumptions,
+and costs with different risk.
+
 ## Governance
 
 ### Token voting
@@ -355,6 +453,12 @@ Material control can also sit with:
 
 An onchain proposal may simply ratify work designed elsewhere. Conversely,
 contracts can prevent a company from unilaterally changing deployed rules.
+
+Governance power should be tested with realistic coalitions, not total token
+supply. Quorum may exclude lost, bridged, or inactive units; delegates may
+control votes without owning tokens; a treasury may vote its own holdings; and
+the proposal threshold may prevent small holders from initiating change. The
+ability to pass, veto, delay, execute, and bypass are distinct powers.
 
 ### Governance risks
 
@@ -407,6 +511,44 @@ Rather than assign one label, score distinct control surfaces:
 Distribution can reduce one failure mode while adding coordination and
 accountability problems. The objective is not a maximum score but a transparent
 match between control and the financial risk it governs.
+
+### Worked Failure Propagation
+
+Suppose a bridged stablecoin is collateral in a lending market and paired with
+native stablecoins in a DEX. A bridge exploit calls backing into question:
+
+```mermaid
+flowchart TD
+    Bridge["Bridge backing impaired"]
+    Sell["Holders sell representation"]
+    Pool["DEX pool becomes imbalanced"]
+    Oracle["Oracle diverges or lags"]
+    Lending["Collateral health falls"]
+    Liq["Liquidations sell more token"]
+    Withdraw["LPs and lenders withdraw"]
+    Debt["Bad debt or redemption shortfall"]
+    Bridge --> Sell --> Pool
+    Pool --> Oracle --> Lending --> Liq --> Pool
+    Pool --> Withdraw --> Debt
+    Lending --> Debt
+```
+
+Every contract can behave exactly as coded while the system loses money. The
+failure crosses bridge security, token redemption, market liquidity, oracle
+design, lending parameters, liquidation capacity, and user incentives. This is
+why protocol review must include economic state transitions and not stop at
+individual contract audits.
+
+### Section Summary
+
+| Principle | Practical implication |
+|---|---|
+| DeFi redistributes intermediation | Map every function and its operator or incentive |
+| Onchain settlement is scoped | Offchain and cross-chain legs need separate finality |
+| Composability stacks claims | Trace through wrappers to ultimate assets and liabilities |
+| Open calls do not guarantee liveness | Test profitability, access, and actor concentration |
+| Governance is executable authority | Map proposal, approval, delay, execution, and bypass |
+| Transparency is data, not comprehension | Reconstruct state, privileges, and economic meaning |
 
 ## Risk Categories
 
