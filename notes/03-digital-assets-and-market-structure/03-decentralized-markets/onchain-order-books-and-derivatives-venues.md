@@ -1,3 +1,17 @@
+---
+title: "Onchain Order Books and Derivatives Venues"
+canonical_id: onchain-order-books-and-derivatives-venues
+node_type: concept
+tags:
+  - digital-assets-and-market-structure
+  - decentralized-markets
+source_files:
+  - notes/03-digital-assets-and-market-structure/03-decentralized-markets/onchain-order-books-and-derivatives-venues.md
+prerequisites:
+  - market-microstructure-and-trading
+  - smart-contracts-virtual-machines-and-token-standards
+status: draft
+---
 # Onchain Order Books and Derivatives Venues
 
 Onchain trading systems increasingly reproduce the central-limit order book,

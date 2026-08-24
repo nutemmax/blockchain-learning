@@ -1,3 +1,16 @@
+---
+title: "Consensus Mechanisms"
+canonical_id: consensus-mechanisms
+node_type: concept
+tags:
+  - blockchain-foundations
+  - consensus-and-networks
+source_files:
+  - notes/02-blockchain-foundations/02-consensus-and-networks/consensus-mechanisms.md
+prerequisites:
+  - blockchain-fundamentals
+status: draft
+---
 # Consensus Mechanisms
 
 Last verified: 2026-07-29.

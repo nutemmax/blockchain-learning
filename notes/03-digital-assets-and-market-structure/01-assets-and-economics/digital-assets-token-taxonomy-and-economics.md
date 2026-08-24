@@ -1,3 +1,17 @@
+---
+title: "Digital Assets, Token Taxonomy, And Economics"
+canonical_id: digital-assets-token-taxonomy-and-economics
+node_type: concept
+tags:
+  - digital-assets-and-market-structure
+  - assets-and-economics
+source_files:
+  - notes/03-digital-assets-and-market-structure/01-assets-and-economics/digital-assets-token-taxonomy-and-economics.md
+prerequisites:
+  - securities-and-financial-instruments
+  - blockchain-fundamentals
+status: draft
+---
 # Digital Assets, Token Taxonomy, And Economics
 
 A digital asset is an electronically represented right, claim, unit, or object

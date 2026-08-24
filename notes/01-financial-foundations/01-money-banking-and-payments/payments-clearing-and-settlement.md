@@ -1,3 +1,16 @@
+---
+title: "Payments, Clearing, And Settlement"
+canonical_id: payments-clearing-and-settlement
+node_type: concept
+tags:
+  - financial-foundations
+  - money-banking-and-payments
+source_files:
+  - notes/01-financial-foundations/01-money-banking-and-payments/payments-clearing-and-settlement.md
+prerequisites:
+  - money-banking-and-balance-sheets
+status: draft
+---
 # Payments, Clearing, And Settlement
 
 A payment is not merely a message saying that value moved. It is a coordinated

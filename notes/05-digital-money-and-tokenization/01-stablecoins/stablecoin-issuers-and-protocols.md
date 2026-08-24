@@ -1,3 +1,16 @@
+---
+title: "Stablecoin Issuers and Protocols: USDT, USDC, Paxos, PYUSD, Sky, GHO, Liquity, and Ethena"
+canonical_id: stablecoin-issuers-and-protocols
+node_type: comparison
+tags:
+  - digital-money-and-tokenization
+  - stablecoins
+source_files:
+  - notes/05-digital-money-and-tokenization/01-stablecoins/stablecoin-issuers-and-protocols.md
+prerequisites:
+  - stablecoins
+status: draft
+---
 # Stablecoin Issuers and Protocols: USDT, USDC, Paxos, PYUSD, Sky, GHO, Liquity, and Ethena
 
 Stablecoins with the same one-dollar target can represent fundamentally

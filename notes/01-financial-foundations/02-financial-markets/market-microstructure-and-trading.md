@@ -1,3 +1,16 @@
+---
+title: "Market Microstructure And Trading"
+canonical_id: market-microstructure-and-trading
+node_type: concept
+tags:
+  - financial-foundations
+  - financial-markets
+source_files:
+  - notes/01-financial-foundations/02-financial-markets/market-microstructure-and-trading.md
+prerequisites:
+  - securities-and-financial-instruments
+status: draft
+---
 # Market Microstructure And Trading
 
 Market microstructure studies how trading rules, participants, information,

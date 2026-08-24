@@ -1,3 +1,17 @@
+---
+title: "Tokenized Deposits and Commercial-Bank Money"
+canonical_id: tokenized-deposits-and-commercial-bank-money
+node_type: concept
+tags:
+  - digital-money-and-tokenization
+  - cbdcs-and-bank-money
+source_files:
+  - notes/05-digital-money-and-tokenization/02-cbdcs-and-bank-money/tokenized-deposits-and-commercial-bank-money.md
+prerequisites:
+  - money-banking-and-balance-sheets
+  - payments-clearing-and-settlement
+status: draft
+---
 # Tokenized Deposits and Commercial-Bank Money
 
 ## Scope

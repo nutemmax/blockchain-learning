@@ -1,3 +1,16 @@
+---
+title: "Oracles, Indexers, And Offchain Data"
+canonical_id: oracles-indexers-and-offchain-data
+node_type: concept
+tags:
+  - blockchain-foundations
+  - execution-and-applications
+source_files:
+  - notes/02-blockchain-foundations/03-execution-and-applications/oracles-indexers-and-offchain-data.md
+prerequisites:
+  - smart-contracts-virtual-machines-and-token-standards
+status: draft
+---
 # Oracles, Indexers, And Offchain Data
 
 Blockchains are deterministic systems: validating nodes must derive the same

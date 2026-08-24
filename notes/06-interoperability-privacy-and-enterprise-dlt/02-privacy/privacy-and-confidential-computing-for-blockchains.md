@@ -1,3 +1,16 @@
+---
+title: "Privacy and Confidential Computing for Blockchains"
+canonical_id: privacy-and-confidential-computing-for-blockchains
+node_type: concept
+tags:
+  - interoperability-privacy-and-enterprise-dlt
+  - privacy
+source_files:
+  - notes/06-interoperability-privacy-and-enterprise-dlt/02-privacy/privacy-and-confidential-computing-for-blockchains.md
+prerequisites:
+  - cryptography-and-blockchain-data-structures
+status: draft
+---
 # Privacy and Confidential Computing for Blockchains
 
 ## Scope

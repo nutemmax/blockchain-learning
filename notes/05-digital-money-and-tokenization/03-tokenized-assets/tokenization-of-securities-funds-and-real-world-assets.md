@@ -1,3 +1,18 @@
+---
+title: "Tokenization of Securities, Funds, and Real-World Assets"
+canonical_id: tokenization-of-securities-funds-and-real-world-assets
+node_type: concept
+tags:
+  - digital-money-and-tokenization
+  - tokenized-assets
+source_files:
+  - notes/05-digital-money-and-tokenization/03-tokenized-assets/tokenization-of-securities-funds-and-real-world-assets.md
+prerequisites:
+  - securities-and-financial-instruments
+  - financial-market-infrastructure
+  - smart-contracts-virtual-machines-and-token-standards
+status: draft
+---
 # Tokenization of Securities, Funds, and Real-World Assets
 
 ## Scope

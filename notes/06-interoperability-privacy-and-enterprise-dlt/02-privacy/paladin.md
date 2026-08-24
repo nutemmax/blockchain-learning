@@ -1,3 +1,20 @@
+---
+title: "Paladin: Programmable Privacy for EVM"
+canonical_id: paladin
+node_type: protocol
+tags:
+  - interoperability-privacy-and-enterprise-dlt
+  - privacy
+source_files:
+  - notes/06-interoperability-privacy-and-enterprise-dlt/02-privacy/paladin.md
+prerequisites:
+  - privacy-and-confidential-computing-for-blockchains
+  - smart-contracts-virtual-machines-and-token-standards
+relations:
+  - type: implements
+    target: privacy-and-confidential-computing-for-blockchains
+status: draft
+---
 # Paladin: Programmable Privacy for EVM
 
 ## Scope

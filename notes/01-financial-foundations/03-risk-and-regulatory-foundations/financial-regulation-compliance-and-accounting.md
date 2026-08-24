@@ -1,3 +1,17 @@
+---
+title: "Financial Regulation, Compliance, And Accounting"
+canonical_id: financial-regulation-compliance-and-accounting
+node_type: concept
+tags:
+  - financial-foundations
+  - risk-and-regulatory-foundations
+source_files:
+  - notes/01-financial-foundations/03-risk-and-regulatory-foundations/financial-regulation-compliance-and-accounting.md
+prerequisites:
+  - money-banking-and-balance-sheets
+  - financial-risk-management
+status: draft
+---
 # Financial Regulation, Compliance, And Accounting
 
 Financial regulation defines the legal perimeter in which money, credit,

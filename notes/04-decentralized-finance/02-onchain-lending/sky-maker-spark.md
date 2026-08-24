@@ -1,3 +1,16 @@
+---
+title: "Maker, Sky, and Spark: Decentralized Stablecoin Credit and Capital Allocation"
+canonical_id: sky-maker-spark
+node_type: comparison
+tags:
+  - decentralized-finance
+  - onchain-lending
+source_files:
+  - notes/04-decentralized-finance/02-onchain-lending/sky-maker-spark.md
+prerequisites:
+  - onchain-lending-and-credit
+status: draft
+---
 # Maker, Sky, and Spark: Decentralized Stablecoin Credit and Capital Allocation
 
 Maker, now part of the broader Sky ecosystem, is one of the earliest and most

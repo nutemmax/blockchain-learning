@@ -1,3 +1,19 @@
+---
+title: "Morpho"
+canonical_id: morpho
+node_type: protocol
+tags:
+  - decentralized-finance
+  - onchain-lending
+source_files:
+  - notes/04-decentralized-finance/02-onchain-lending/morpho.md
+prerequisites:
+  - onchain-lending-and-credit
+relations:
+  - type: implements
+    target: onchain-lending-and-credit
+status: draft
+---
 # Morpho
 
 Morpho is a family of non-custodial lending primitives built around permissionless

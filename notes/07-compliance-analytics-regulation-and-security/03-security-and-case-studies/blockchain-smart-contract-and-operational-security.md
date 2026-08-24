@@ -1,3 +1,17 @@
+---
+title: "Blockchain, Smart-Contract, and Operational Security"
+canonical_id: blockchain-smart-contract-and-operational-security
+node_type: risk
+tags:
+  - compliance-analytics-regulation-and-security
+  - security-and-case-studies
+source_files:
+  - notes/07-compliance-analytics-regulation-and-security/03-security-and-case-studies/blockchain-smart-contract-and-operational-security.md
+prerequisites:
+  - cryptography-and-blockchain-data-structures
+  - smart-contracts-virtual-machines-and-token-standards
+status: draft
+---
 # Blockchain, Smart-Contract, and Operational Security
 
 ## Purpose and scope

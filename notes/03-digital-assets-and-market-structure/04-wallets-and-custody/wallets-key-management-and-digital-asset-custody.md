@@ -1,3 +1,16 @@
+---
+title: "Wallets, Key Management, and Digital-Asset Custody"
+canonical_id: wallets-key-management-and-digital-asset-custody
+node_type: concept
+tags:
+  - digital-assets-and-market-structure
+  - wallets-and-custody
+source_files:
+  - notes/03-digital-assets-and-market-structure/04-wallets-and-custody/wallets-key-management-and-digital-asset-custody.md
+prerequisites:
+  - cryptography-and-blockchain-data-structures
+status: draft
+---
 # Wallets, Key Management, and Digital-Asset Custody
 
 A blockchain does not normally store coins or tokens *inside a wallet*. It stores

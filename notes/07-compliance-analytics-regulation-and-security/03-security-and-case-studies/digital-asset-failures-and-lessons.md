@@ -1,3 +1,17 @@
+---
+title: "Digital-Asset Failures and Lessons"
+canonical_id: digital-asset-failures-and-lessons
+node_type: risk
+tags:
+  - compliance-analytics-regulation-and-security
+  - security-and-case-studies
+source_files:
+  - notes/07-compliance-analytics-regulation-and-security/03-security-and-case-studies/digital-asset-failures-and-lessons.md
+prerequisites:
+  - financial-risk-management
+  - blockchain-smart-contract-and-operational-security
+status: draft
+---
 # Digital-Asset Failures and Lessons
 
 ## Purpose and method

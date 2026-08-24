@@ -1,3 +1,16 @@
+---
+title: "Blockchain Analytics for Compliance and Investigations"
+canonical_id: blockchain-analytics
+node_type: concept
+tags:
+  - compliance-analytics-regulation-and-security
+  - aml-and-blockchain-analytics
+source_files:
+  - notes/07-compliance-analytics-regulation-and-security/01-aml-and-blockchain-analytics/blockchain-analytics.md
+prerequisites:
+  - blockchain-architecture
+status: draft
+---
 # Blockchain Analytics for Compliance and Investigations
 
 Last verified: 2026-07-29.

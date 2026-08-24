@@ -1,3 +1,20 @@
+---
+title: "Zama, TFHE, and fhEVM"
+canonical_id: zama
+node_type: institution
+tags:
+  - interoperability-privacy-and-enterprise-dlt
+  - privacy
+source_files:
+  - notes/06-interoperability-privacy-and-enterprise-dlt/02-privacy/zama.md
+prerequisites:
+  - privacy-and-confidential-computing-for-blockchains
+  - smart-contracts-virtual-machines-and-token-standards
+relations:
+  - type: implements
+    target: privacy-and-confidential-computing-for-blockchains
+status: draft
+---
 # Zama, TFHE, and fhEVM
 
 ## Scope

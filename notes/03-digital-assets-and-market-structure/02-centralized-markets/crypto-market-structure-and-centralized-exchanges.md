@@ -1,3 +1,20 @@
+---
+title: "Crypto Market Structure and Centralized Exchanges"
+canonical_id: crypto-market-structure-and-centralized-exchanges
+node_type: concept
+tags:
+  - digital-assets-and-market-structure
+  - centralized-markets
+source_files:
+  - notes/03-digital-assets-and-market-structure/02-centralized-markets/crypto-market-structure-and-centralized-exchanges.md
+prerequisites:
+  - market-microstructure-and-trading
+  - digital-assets-token-taxonomy-and-economics
+relations:
+  - type: contrasts_with
+    target: decentralized-exchanges-and-automated-market-makers
+status: draft
+---
 # Crypto Market Structure and Centralized Exchanges
 
 Crypto markets combine public blockchain settlement with a large layer of

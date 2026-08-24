@@ -1,3 +1,14 @@
+---
+title: "Blockchain Fundamentals"
+canonical_id: blockchain-fundamentals
+node_type: concept
+tags:
+  - blockchain-foundations
+  - core-architecture
+source_files:
+  - notes/02-blockchain-foundations/01-core-architecture/blockchain-fundamentals.md
+status: draft
+---
 # Blockchain Fundamentals
 
 A blockchain is a shared ledger maintained by a network of computers that do not need to fully trust one another. The ledger records transactions, groups them into blocks, links those blocks with cryptographic hashes, and uses a consensus process so the network can agree which history is valid.

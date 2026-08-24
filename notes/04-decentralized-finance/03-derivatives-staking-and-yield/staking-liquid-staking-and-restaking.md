@@ -1,3 +1,17 @@
+---
+title: "Staking, Liquid Staking, and Restaking"
+canonical_id: staking-liquid-staking-and-restaking
+node_type: concept
+tags:
+  - decentralized-finance
+  - derivatives-staking-and-yield
+source_files:
+  - notes/04-decentralized-finance/03-derivatives-staking-and-yield/staking-liquid-staking-and-restaking.md
+prerequisites:
+  - consensus-mechanisms
+  - ethereum
+status: draft
+---
 # Staking, Liquid Staking, and Restaking
 
 Proof-of-stake networks require participants to place assets at risk while they

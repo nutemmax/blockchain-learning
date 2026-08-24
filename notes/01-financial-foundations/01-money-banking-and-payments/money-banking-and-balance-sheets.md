@@ -1,3 +1,14 @@
+---
+title: "Money, Banking, And Balance Sheets"
+canonical_id: money-banking-and-balance-sheets
+node_type: concept
+tags:
+  - financial-foundations
+  - money-banking-and-payments
+source_files:
+  - notes/01-financial-foundations/01-money-banking-and-payments/money-banking-and-balance-sheets.md
+status: draft
+---
 # Money, Banking, And Balance Sheets
 
 Money is not one object. It is a system of transferable claims, settlement

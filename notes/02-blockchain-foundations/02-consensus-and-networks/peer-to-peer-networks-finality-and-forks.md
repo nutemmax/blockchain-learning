@@ -1,3 +1,16 @@
+---
+title: "Peer-To-Peer Networks, Finality, And Forks"
+canonical_id: peer-to-peer-networks-finality-and-forks
+node_type: concept
+tags:
+  - blockchain-foundations
+  - consensus-and-networks
+source_files:
+  - notes/02-blockchain-foundations/02-consensus-and-networks/peer-to-peer-networks-finality-and-forks.md
+prerequisites:
+  - consensus-mechanisms
+status: draft
+---
 # Peer-To-Peer Networks, Finality, And Forks
 
 A blockchain is a replicated state machine operating over an adversarial

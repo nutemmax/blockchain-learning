@@ -1,3 +1,17 @@
+---
+title: "Central Bank Digital Currencies"
+canonical_id: central-bank-digital-currencies
+node_type: concept
+tags:
+  - digital-money-and-tokenization
+  - cbdcs-and-bank-money
+source_files:
+  - notes/05-digital-money-and-tokenization/02-cbdcs-and-bank-money/central-bank-digital-currencies.md
+prerequisites:
+  - money-banking-and-balance-sheets
+  - payments-clearing-and-settlement
+status: draft
+---
 # Central Bank Digital Currencies
 
 A central bank digital currency (CBDC) is a digital liability of a central bank,

@@ -1,3 +1,16 @@
+---
+title: "Institutional Custody and Wallet Infrastructure"
+canonical_id: institutional-custody-and-wallet-infrastructure
+node_type: concept
+tags:
+  - digital-assets-and-market-structure
+  - wallets-and-custody
+source_files:
+  - notes/03-digital-assets-and-market-structure/04-wallets-and-custody/institutional-custody-and-wallet-infrastructure.md
+prerequisites:
+  - wallets-key-management-and-digital-asset-custody
+status: draft
+---
 # Institutional Custody and Wallet Infrastructure
 
 Institutional digital-asset custody is delivered through several businesses that

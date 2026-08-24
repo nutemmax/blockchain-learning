@@ -1,3 +1,20 @@
+---
+title: "Digital-Asset Regulation"
+canonical_id: digital-asset-regulation
+node_type: regulation
+tags:
+  - compliance-analytics-regulation-and-security
+  - regulation
+source_files:
+  - notes/07-compliance-analytics-regulation-and-security/02-regulation/digital-asset-regulation.md
+prerequisites:
+  - financial-regulation-compliance-and-accounting
+  - digital-assets-token-taxonomy-and-economics
+relations:
+  - type: part_of
+    target: financial-regulation-compliance-and-accounting
+status: draft
+---
 # Digital-Asset Regulation
 
 ## Scope and Method

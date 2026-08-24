@@ -1,3 +1,17 @@
+---
+title: "Decentralized Exchanges and Automated Market Makers"
+canonical_id: decentralized-exchanges-and-automated-market-makers
+node_type: concept
+tags:
+  - digital-assets-and-market-structure
+  - decentralized-markets
+source_files:
+  - notes/03-digital-assets-and-market-structure/03-decentralized-markets/decentralized-exchanges-and-automated-market-makers.md
+prerequisites:
+  - market-microstructure-and-trading
+  - smart-contracts-virtual-machines-and-token-standards
+status: draft
+---
 # Decentralized Exchanges and Automated Market Makers
 
 A decentralized exchange (DEX) is a set of smart contracts and supporting

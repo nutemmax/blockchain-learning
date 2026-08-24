@@ -1,3 +1,16 @@
+---
+title: "Interoperability Protocols: CCIP, Axelar, Wormhole, IBC, XCM, and Cacti"
+canonical_id: interoperability-protocols
+node_type: comparison
+tags:
+  - interoperability-privacy-and-enterprise-dlt
+  - interoperability
+source_files:
+  - notes/06-interoperability-privacy-and-enterprise-dlt/01-interoperability/interoperability-protocols.md
+prerequisites:
+  - blockchain-interoperability-and-bridges
+status: draft
+---
 # Interoperability Protocols: CCIP, Axelar, Wormhole, IBC, XCM, and Cacti
 
 ## Scope

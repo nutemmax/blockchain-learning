@@ -1,3 +1,17 @@
+---
+title: "DeFi Architecture, Composability, and Governance"
+canonical_id: defi-architecture-composability-and-governance
+node_type: concept
+tags:
+  - decentralized-finance
+  - defi-foundations
+source_files:
+  - notes/04-decentralized-finance/01-defi-foundations/defi-architecture-composability-and-governance.md
+prerequisites:
+  - smart-contracts-virtual-machines-and-token-standards
+  - decentralized-exchanges-and-automated-market-makers
+status: draft
+---
 # DeFi Architecture, Composability, and Governance
 
 Decentralized finance (DeFi) uses blockchain programs to provide trading,

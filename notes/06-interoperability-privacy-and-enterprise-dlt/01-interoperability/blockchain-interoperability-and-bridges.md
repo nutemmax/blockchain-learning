@@ -1,3 +1,16 @@
+---
+title: "Blockchain Interoperability and Bridges"
+canonical_id: blockchain-interoperability-and-bridges
+node_type: concept
+tags:
+  - interoperability-privacy-and-enterprise-dlt
+  - interoperability
+source_files:
+  - notes/06-interoperability-privacy-and-enterprise-dlt/01-interoperability/blockchain-interoperability-and-bridges.md
+prerequisites:
+  - peer-to-peer-networks-finality-and-forks
+status: draft
+---
 # Blockchain Interoperability and Bridges
 
 ## Scope

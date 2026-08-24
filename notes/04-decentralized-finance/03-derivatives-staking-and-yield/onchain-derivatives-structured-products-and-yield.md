@@ -1,3 +1,17 @@
+---
+title: "Onchain Derivatives, Structured Products, and Yield"
+canonical_id: onchain-derivatives-structured-products-and-yield
+node_type: concept
+tags:
+  - decentralized-finance
+  - derivatives-staking-and-yield
+source_files:
+  - notes/04-decentralized-finance/03-derivatives-staking-and-yield/onchain-derivatives-structured-products-and-yield.md
+prerequisites:
+  - onchain-order-books-and-derivatives-venues
+  - defi-architecture-composability-and-governance
+status: draft
+---
 # Onchain Derivatives, Structured Products, and Yield
 
 Derivatives separate economic exposure from direct ownership of an asset. A

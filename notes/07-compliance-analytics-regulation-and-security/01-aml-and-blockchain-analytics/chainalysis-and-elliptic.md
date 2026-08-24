@@ -1,3 +1,16 @@
+---
+title: "Chainalysis and Elliptic"
+canonical_id: chainalysis-and-elliptic
+node_type: comparison
+tags:
+  - compliance-analytics-regulation-and-security
+  - aml-and-blockchain-analytics
+source_files:
+  - notes/07-compliance-analytics-regulation-and-security/01-aml-and-blockchain-analytics/chainalysis-and-elliptic.md
+prerequisites:
+  - blockchain-analytics
+status: draft
+---
 # Chainalysis and Elliptic
 
 Last verified: 2026-07-29.

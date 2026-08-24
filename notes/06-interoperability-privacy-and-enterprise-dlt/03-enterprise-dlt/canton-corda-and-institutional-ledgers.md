@@ -1,3 +1,16 @@
+---
+title: "Canton, Daml, Corda, and Institutional Ledger Architectures"
+canonical_id: canton-corda-and-institutional-ledgers
+node_type: comparison
+tags:
+  - interoperability-privacy-and-enterprise-dlt
+  - enterprise-dlt
+source_files:
+  - notes/06-interoperability-privacy-and-enterprise-dlt/03-enterprise-dlt/canton-corda-and-institutional-ledgers.md
+prerequisites:
+  - blockchain-architecture
+status: draft
+---
 # Canton, Daml, Corda, and Institutional Ledger Architectures
 
 ## Scope

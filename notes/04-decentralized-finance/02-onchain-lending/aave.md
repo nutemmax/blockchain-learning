@@ -1,3 +1,19 @@
+---
+title: "Aave"
+canonical_id: aave
+node_type: protocol
+tags:
+  - decentralized-finance
+  - onchain-lending
+source_files:
+  - notes/04-decentralized-finance/02-onchain-lending/aave.md
+prerequisites:
+  - onchain-lending-and-credit
+relations:
+  - type: implements
+    target: onchain-lending-and-credit
+status: draft
+---
 # Aave
 
 Aave is a multi-asset onchain lending protocol. Suppliers provide liquidity;

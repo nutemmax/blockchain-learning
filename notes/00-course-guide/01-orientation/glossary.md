@@ -1,3 +1,14 @@
+---
+title: "Glossary"
+canonical_id: glossary
+node_type: source
+tags:
+  - course-guide
+  - orientation
+source_files:
+  - notes/00-course-guide/01-orientation/glossary.md
+status: draft
+---
 # Glossary
 
 This glossary gives concise working definitions for recurring terms. Complex

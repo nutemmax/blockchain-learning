@@ -1,3 +1,14 @@
+---
+title: "Securities And Financial Instruments"
+canonical_id: securities-and-financial-instruments
+node_type: concept
+tags:
+  - financial-foundations
+  - financial-markets
+source_files:
+  - notes/01-financial-foundations/02-financial-markets/securities-and-financial-instruments.md
+status: draft
+---
 # Securities And Financial Instruments
 
 A financial instrument is a contract or legally recognized position that gives

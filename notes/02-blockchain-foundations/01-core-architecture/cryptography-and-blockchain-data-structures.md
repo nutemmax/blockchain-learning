@@ -1,3 +1,16 @@
+---
+title: "Cryptography And Blockchain Data Structures"
+canonical_id: cryptography-and-blockchain-data-structures
+node_type: concept
+tags:
+  - blockchain-foundations
+  - core-architecture
+source_files:
+  - notes/02-blockchain-foundations/01-core-architecture/cryptography-and-blockchain-data-structures.md
+prerequisites:
+  - blockchain-fundamentals
+status: draft
+---
 # Cryptography And Blockchain Data Structures
 
 Blockchains combine ordinary distributed-systems engineering with

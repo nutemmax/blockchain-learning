@@ -1,3 +1,17 @@
+---
+title: "Financial Risk Management"
+canonical_id: financial-risk-management
+node_type: risk
+tags:
+  - financial-foundations
+  - risk-and-regulatory-foundations
+source_files:
+  - notes/01-financial-foundations/03-risk-and-regulatory-foundations/financial-risk-management.md
+prerequisites:
+  - market-microstructure-and-trading
+  - financial-market-infrastructure
+status: draft
+---
 # Financial Risk Management
 
 Risk is the possibility that actual outcomes differ materially from intended

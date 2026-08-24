@@ -1,3 +1,17 @@
+---
+title: "Stablecoins: Money-Like Tokens, Issuance, Reserves, Mechanisms, and Risk"
+canonical_id: stablecoins
+node_type: concept
+tags:
+  - digital-money-and-tokenization
+  - stablecoins
+source_files:
+  - notes/05-digital-money-and-tokenization/01-stablecoins/stablecoins.md
+prerequisites:
+  - money-banking-and-balance-sheets
+  - digital-assets-token-taxonomy-and-economics
+status: draft
+---
 # Stablecoins: Money-Like Tokens, Issuance, Reserves, Mechanisms, and Risk
 
 A stablecoin is a digital token designed to maintain a relatively stable value

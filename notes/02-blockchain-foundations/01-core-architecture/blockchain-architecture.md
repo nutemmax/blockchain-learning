@@ -1,3 +1,16 @@
+---
+title: "Blockchain Architecture"
+canonical_id: blockchain-architecture
+node_type: concept
+tags:
+  - blockchain-foundations
+  - core-architecture
+source_files:
+  - notes/02-blockchain-foundations/01-core-architecture/blockchain-architecture.md
+prerequisites:
+  - blockchain-fundamentals
+status: draft
+---
 # Blockchain Architecture
 
 Blockchain architecture describes how a blockchain is built internally: how nodes communicate, how transactions are executed, how blocks are produced, how state is stored, how consensus is reached, and how the system exposes data to wallets and applications.

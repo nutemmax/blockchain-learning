@@ -1,3 +1,17 @@
+---
+title: "Onchain Lending and Credit"
+canonical_id: onchain-lending-and-credit
+node_type: concept
+tags:
+  - decentralized-finance
+  - onchain-lending
+source_files:
+  - notes/04-decentralized-finance/02-onchain-lending/onchain-lending-and-credit.md
+prerequisites:
+  - defi-architecture-composability-and-governance
+  - financial-risk-management
+status: draft
+---
 # Onchain Lending and Credit
 
 Onchain lending protocols connect suppliers of an asset with borrowers through

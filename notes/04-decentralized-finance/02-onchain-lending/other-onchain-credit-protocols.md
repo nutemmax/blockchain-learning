@@ -1,3 +1,16 @@
+---
+title: "Other Onchain Credit Protocols: Compound, Euler, Liquity, Maple, Centrifuge, and Credit Design Patterns"
+canonical_id: other-onchain-credit-protocols
+node_type: comparison
+tags:
+  - decentralized-finance
+  - onchain-lending
+source_files:
+  - notes/04-decentralized-finance/02-onchain-lending/other-onchain-credit-protocols.md
+prerequisites:
+  - onchain-lending-and-credit
+status: draft
+---
 # Other Onchain Credit Protocols: Compound, Euler, Liquity, Maple, Centrifuge, and Credit Design Patterns
 
 There is no single architecture called "DeFi lending." Protocols that appear

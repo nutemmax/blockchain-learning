@@ -1,3 +1,19 @@
+---
+title: "Coinbase"
+canonical_id: coinbase
+node_type: institution
+tags:
+  - digital-assets-and-market-structure
+  - centralized-markets
+source_files:
+  - notes/03-digital-assets-and-market-structure/02-centralized-markets/coinbase.md
+prerequisites:
+  - crypto-market-structure-and-centralized-exchanges
+relations:
+  - type: implements
+    target: crypto-market-structure-and-centralized-exchanges
+status: draft
+---
 # Coinbase
 
 Coinbase is best understood not as one exchange but as a group of connected

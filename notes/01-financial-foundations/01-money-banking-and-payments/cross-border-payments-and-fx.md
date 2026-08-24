@@ -1,3 +1,16 @@
+---
+title: "Cross-Border Payments And Foreign Exchange"
+canonical_id: cross-border-payments-and-fx
+node_type: concept
+tags:
+  - financial-foundations
+  - money-banking-and-payments
+source_files:
+  - notes/01-financial-foundations/01-money-banking-and-payments/cross-border-payments-and-fx.md
+prerequisites:
+  - payments-clearing-and-settlement
+status: draft
+---
 # Cross-Border Payments And Foreign Exchange
 
 A payment becomes cross-border when payer and payee, their payment providers,

@@ -1,3 +1,19 @@
+---
+title: "LayerZero"
+canonical_id: layerzero
+node_type: protocol
+tags:
+  - interoperability-privacy-and-enterprise-dlt
+  - interoperability
+source_files:
+  - notes/06-interoperability-privacy-and-enterprise-dlt/01-interoperability/layerzero.md
+prerequisites:
+  - blockchain-interoperability-and-bridges
+relations:
+  - type: implements
+    target: blockchain-interoperability-and-bridges
+status: draft
+---
 # LayerZero
 
 ## Scope

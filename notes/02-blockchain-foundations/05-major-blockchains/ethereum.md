@@ -1,3 +1,21 @@
+---
+title: "Ethereum"
+canonical_id: ethereum
+node_type: network
+tags:
+  - blockchain-foundations
+  - major-blockchains
+source_files:
+  - notes/02-blockchain-foundations/05-major-blockchains/ethereum.md
+prerequisites:
+  - blockchain-architecture
+  - consensus-mechanisms
+  - smart-contracts-virtual-machines-and-token-standards
+relations:
+  - type: implements
+    target: blockchain-architecture
+status: draft
+---
 # Ethereum
 
 Last verified: 2026-07-29.

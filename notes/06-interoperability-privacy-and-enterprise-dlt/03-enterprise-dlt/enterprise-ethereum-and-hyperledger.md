@@ -1,3 +1,17 @@
+---
+title: "Enterprise Ethereum and Hyperledger"
+canonical_id: enterprise-ethereum-and-hyperledger
+node_type: comparison
+tags:
+  - interoperability-privacy-and-enterprise-dlt
+  - enterprise-dlt
+source_files:
+  - notes/06-interoperability-privacy-and-enterprise-dlt/03-enterprise-dlt/enterprise-ethereum-and-hyperledger.md
+prerequisites:
+  - blockchain-architecture
+  - smart-contracts-virtual-machines-and-token-standards
+status: draft
+---
 # Enterprise Ethereum and Hyperledger
 
 Last verified: 2026-07-29.

@@ -1,3 +1,17 @@
+---
+title: "Financial Market Infrastructure"
+canonical_id: financial-market-infrastructure
+node_type: concept
+tags:
+  - financial-foundations
+  - financial-markets
+source_files:
+  - notes/01-financial-foundations/02-financial-markets/financial-market-infrastructure.md
+prerequisites:
+  - payments-clearing-and-settlement
+  - securities-and-financial-instruments
+status: draft
+---
 # Financial Market Infrastructure
 
 Financial market infrastructure is the set of institutions, ledgers, networks, legal rules, and operating processes that let money and financial assets move safely between people and institutions.

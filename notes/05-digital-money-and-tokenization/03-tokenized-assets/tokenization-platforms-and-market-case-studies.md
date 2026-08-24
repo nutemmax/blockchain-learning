@@ -1,3 +1,16 @@
+---
+title: "Tokenization Platforms and Market Case Studies"
+canonical_id: tokenization-platforms-and-market-case-studies
+node_type: comparison
+tags:
+  - digital-money-and-tokenization
+  - tokenized-assets
+source_files:
+  - notes/05-digital-money-and-tokenization/03-tokenized-assets/tokenization-platforms-and-market-case-studies.md
+prerequisites:
+  - tokenization-of-securities-funds-and-real-world-assets
+status: draft
+---
 # Tokenization Platforms and Market Case Studies
 
 ## Scope and Reading Method

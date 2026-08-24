@@ -1,3 +1,17 @@
+---
+title: "Alternative Layer 1s And Appchains"
+canonical_id: alternative-layer-1s-and-appchains
+node_type: comparison
+tags:
+  - blockchain-foundations
+  - major-blockchains
+source_files:
+  - notes/02-blockchain-foundations/05-major-blockchains/alternative-layer-1s-and-appchains.md
+prerequisites:
+  - blockchain-architecture
+  - consensus-mechanisms
+status: draft
+---
 # Alternative Layer 1s And Appchains
 
 Bitcoin and Ethereum are only two points in a large design space. Other layer

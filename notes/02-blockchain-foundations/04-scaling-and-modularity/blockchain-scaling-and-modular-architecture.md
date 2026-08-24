@@ -1,3 +1,17 @@
+---
+title: "Blockchain Scaling and Modular Architecture"
+canonical_id: blockchain-scaling-and-modular-architecture
+node_type: concept
+tags:
+  - blockchain-foundations
+  - scaling-and-modularity
+source_files:
+  - notes/02-blockchain-foundations/04-scaling-and-modularity/blockchain-scaling-and-modular-architecture.md
+prerequisites:
+  - blockchain-architecture
+  - consensus-mechanisms
+status: draft
+---
 # Blockchain Scaling and Modular Architecture
 
 Blockchain scaling is the effort to increase how much useful activity a blockchain ecosystem can support without destroying the properties that made the system valuable in the first place: independent verification, censorship resistance, security, and credible settlement.

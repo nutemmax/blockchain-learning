@@ -1,3 +1,16 @@
+---
+title: "Smart Contracts, Virtual Machines, And Token Standards"
+canonical_id: smart-contracts-virtual-machines-and-token-standards
+node_type: concept
+tags:
+  - blockchain-foundations
+  - execution-and-applications
+source_files:
+  - notes/02-blockchain-foundations/03-execution-and-applications/smart-contracts-virtual-machines-and-token-standards.md
+prerequisites:
+  - blockchain-architecture
+status: draft
+---
 # Smart Contracts, Virtual Machines, And Token Standards
 
 A smart contract is program code and persistent state executed under a

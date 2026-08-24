@@ -1,3 +1,20 @@
+---
+title: "Bitcoin"
+canonical_id: bitcoin
+node_type: network
+tags:
+  - blockchain-foundations
+  - major-blockchains
+source_files:
+  - notes/02-blockchain-foundations/05-major-blockchains/bitcoin.md
+prerequisites:
+  - cryptography-and-blockchain-data-structures
+  - consensus-mechanisms
+relations:
+  - type: implements
+    target: blockchain-architecture
+status: draft
+---
 # Bitcoin
 
 Last verified: 2026-07-29.

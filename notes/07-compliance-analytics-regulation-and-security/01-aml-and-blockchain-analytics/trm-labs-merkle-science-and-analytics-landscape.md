@@ -1,3 +1,16 @@
+---
+title: "TRM Labs, Merkle Science, and the Blockchain-Analytics Landscape"
+canonical_id: trm-labs-merkle-science-and-analytics-landscape
+node_type: comparison
+tags:
+  - compliance-analytics-regulation-and-security
+  - aml-and-blockchain-analytics
+source_files:
+  - notes/07-compliance-analytics-regulation-and-security/01-aml-and-blockchain-analytics/trm-labs-merkle-science-and-analytics-landscape.md
+prerequisites:
+  - blockchain-analytics
+status: draft
+---
 # TRM Labs, Merkle Science, and the Blockchain-Analytics Landscape
 
 ## Scope

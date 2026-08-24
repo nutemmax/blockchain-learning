@@ -1,3 +1,20 @@
+---
+title: "DeFi Risk, Security, and Economic Attacks"
+canonical_id: defi-risk-security-and-economic-attacks
+node_type: risk
+tags:
+  - decentralized-finance
+  - defi-risk-and-failures
+source_files:
+  - notes/04-decentralized-finance/04-defi-risk-and-failures/defi-risk-security-and-economic-attacks.md
+prerequisites:
+  - defi-architecture-composability-and-governance
+  - onchain-lending-and-credit
+relations:
+  - type: part_of
+    target: financial-risk-management
+status: draft
+---
 # DeFi Risk, Security, and Economic Attacks
 
 DeFi risk is not synonymous with a smart-contract bug. A protocol can execute
